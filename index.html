@@ -5,16 +5,96 @@
             integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <title></title>
 </head>
-<body style="background-image: url('imgs/background.gif');">
+
+<style>
+    body {
+        background-image: url("imgs/world_map.jpg");
+        background-position: left top;
+        background-repeat: no-repeat;
+        background-size: cover, contain, auto
+    }
+
+    /*Buttons*/
+    .button {
+        display: inline-block;
+        padding: 1px 15px;
+        margin: 5px 5px;
+        font-size: 50px;
+        cursor: crosshair;
+        text-align: center;
+        text-decoration: none;
+        outline: none;
+        color: #fff;
+        border: none;
+        border-radius: 15px;
+        box-shadow: 0 9px #e800ff;
+    }
+    .button:active {
+        background-color: #3e8e41;
+        box-shadow: 0 5px #666;
+        transform: translateY(4px);
+    }
+    .button1 {
+        background-color: #04AA6D;
+    }
+    .button1:hover {background-color: #3e8e41}
+
+    .button2 {
+        background-color: #e50b67;
+    }
+    .button2:hover {background-color: #9b0a41}
+
+    .button3 {
+        background-color: #0b50e5;
+    }
+    .button3:hover {background-color: #1a26a2
+    }
+
+    .verticalButtons {
+        display: flex;
+        flex-direction: column; /* Aligns the children (buttons) vertically */
+        align-items: flex-start; /* Center-aligns the buttons horizontally */
+        padding: 10px; /* Optional: Adds some space inside the container */
+        width: max-content; /* Adjust the width of the container to fit the content */
+    }
+
+    .boxy {
+        border: 5px solid gray;
+        padding: 10px;
+        margin: 10px 5px;
+        width: fit-content;
+        background-color: #f8b6b6;
+    }
+    promptText{
+        font-size:20px;
+        white-space: pre;
+        font-family: "Lucida Console", "Courier New", monospace;
+    }
+</style>
 
 <div id="main" style="display:none">
-    <div id="game_text" style="font-size:100px;color:white"></div>
-    <div id="game_img"></div>
-    <button id="but_a" onclick="key_input('A');" style="font-size:100px">A</button>
-    <button id="but_b" onclick="key_input('B');" style="font-size:100px">B</button>
-    <button id="but_c" onclick="key_input('C');" style="font-size:100px;display:none">C</button>
-    <button id="but_d" onclick="key_input('D');" style="font-size:100px;display:none">D</button>
+    <div class="boxy">
+        <promptText id="game_text"></promptText>
+    </div>
+
+<!--    Load Up Image-->
+    <promptText id="game_img"></promptText>
+    <promptText id="get_buttons"></promptText>
+
+
+    <div class="boxy">
+        <promptText id="game_prompt"></promptText>
+        <div class="verticalButtons">
+<!--            <button class="button button1" id="but_a" onclick="key_input('A');">A</button><span id="text_a"></span>-->
+<!--            <button class="button button2" id="but_b" onclick="key_input('B');">B</button><span id="text_b"></span>-->
+<!--            <button class="button button3" id="but_c" onclick="key_input('C');">C</button><span id="text_c"></span>-->
+            <button class="button button1" id="but_a">A</button><span id="text_a"></span>
+            <button class="button button2" id="but_b">B</button><span id="text_b"></span>
+            <button class="button button3" id="but_c">C</button><span id="text_c"></span>
+        </div>
+    </div>
 </div>
+
 
 
 <div id="splash" style="font-size:100px"> Loading...<br>
@@ -29,6 +109,8 @@
 <script>
     let game_data;
     let current_state;
+    let positive_end = 26;
+    let negative_end = 26;
 
     let stim = 0;
     let points = 0;
@@ -39,81 +121,177 @@
         setTimeout(function () {
             $('#splashy').hide();
             $('#main').show();
+            initializeGame();
         }, 500);  // Delay for showing loading animations
-
     }, 500);  // Delay for showing loading animations
 
+    function initializeGame(){
+        $.getJSON("data/game.json", function (data) {
+            // game_data = data;
+            // current_state = data['start_state'];
+            // $('#game_text').html(game_data['states'][data['start_state']]['text']); // Sets the text
+            // $('#game_prompt').html(game_data['states'][data['start_state']]['prompt']); // Sets the prompt in a separate element
+            // // updateButtonText(current_state);
+            game_data = data;
+            current_state = data['start_state'];
+            updateState(current_state);
+        });
+    }
+    // Update State Function
+    function updateState(state) {
+        current_state = state;
+        console.log(current_state);
+        let stateData = game_data['states'][state];
+        stateData.true_state = undefined;
+        $('#game_text').html(stateData.text || '');
+        $('#game_prompt').html(stateData.prompt || '');
 
-    $.getJSON("data/game.json", function (data) {
-        game_data = data;
-        current_state = data['start_state'];
-        $('#game_text').html(game_data['states'][data['start_state']]['text']);
+        // Update Buttons
+        updateButtons(stateData);
 
+        // Check if 'condition' exists in stateData before trying to access it
+        if (typeof stateData.condition !== 'undefined') {
+            console.log("WHAT THE FUCK: " + current_state + " || " + stateData.condition);
+
+            // Simulated condition checking
+            let conditionMet = Math.random() < 0.5; // Randomly decide if condition is met
+            let nextState = conditionMet ? stateData.true_state : stateData.false_state;
+
+            // Ensure nextState is defined before attempting to transition
+            if (nextState) {
+                setTimeout(() => updateState(nextState), 2000); // Delay for demonstration
+            }
+        }
+    }
+
+    // Update Buttons Based on State
+    function updateButtons(stateData) {
+        $('.button').hide(); // Hide all buttons initially
+        $('#text_a, #text_b, #text_c').text(''); // Clear button texts
+
+        // Show buttons based on choice_count and set texts
+        for (let i = 1; i <= stateData.choice_count; i++) {
+            let buttonId = String.fromCharCode(64 + i).toLowerCase(); // Convert 1 to 'a', 2 to 'b', etc.
+            $('#but_' + buttonId).show();
+            if (stateData.buttonText) {
+                $('#text_' + buttonId).text(stateData.buttonText[String.fromCharCode(64 + i)]);
+            }
+        }
+    }
+
+    $('.button').click(function() {
+        let buttonId = this.id.replace('but_', '').toUpperCase(); // Convert 'but_a' to 'A', for example
+
+        // Directly accessing the next state from the transitions, defaulting to the current state if undefined
+        let nextState = game_data['states'][current_state]['trans']?.[buttonId] || current_state;
+
+        updateState(nextState);
     });
 
-    function next_state(state) {
-        console.log("Current State = " + current_state + " --> New State= " + state)
-        current_state = state
 
-        if (game_data['states'][current_state]['play_sound'] != null) {
-            const audioElement = document.createElement('audio');
-            audioElement.setAttribute('src', game_data['states'][current_state]['play_sound']);
-            audioElement.play();
-        }
+    // // Button Click Handlers
+    // $('.button').click(function() {
+    //     let buttonId = this.id.replace('but_', '').toUpperCase(); // Get button id and convert to uppercase ('a' to 'A')
+    //     let nextState = game_data['states'][current_state].transitions[buttonId] || current_state; // Default to current state if no transition defined
+    //     updateState(nextState);
+    // });
 
-        if (game_data['states'][current_state]['text'] != null) {
-            $('#game_text').html(game_data['states'][current_state]['text']);
-        } else {
-            console.log("no text");
-            if (game_data['states'][current_state]['stim_change'] != null) {
-                console.log("+ stim " + game_data['states'][current_state]['stim_change'])
-                stim = stim + game_data['states'][current_state]['stim_change']
-            }
-            if (game_data['states'][current_state]['point_change'] != null) {
-                console.log("+ point " + game_data['states'][current_state]['stim_change'])
-                points = points + game_data['states'][current_state]['point_change']
-            }
-            if (game_data['states'][current_state]['image_change'] != null) {
-                $("#game_img").html(game_data['states'][current_state]['image_change']);
-            }
-            if (game_data['states'][current_state]['show_button'] != null) {
-                console.log(game_data['states'][current_state]['show_button'])
-                $("#but_" + game_data['states'][current_state]['show_button']).show();
-            }
-            if (game_data['states'][current_state]['restart_cmd'] != null) {
-                location.reload();
-            }
+    // function updateButtonText(state) {
+    //     var current_state = game_data['states'][state];
+    //     var choiceCount = current_state['choice_count'] || 0;
+    //     $('.button').hide();
+    //     $('#text_a, #text_b, #text_c').text(''); // Clear all button texts
+    //
+    //     for (let i = 1; i <= choiceCount; i++) {
+    //         $('#but_' + String.fromCharCode(64 + i).toLowerCase()).show();
+    //         if (current_state.buttonText && current_state.buttonText[String.fromCharCode(64 + i)]) {
+    //             $('#text_' + String.fromCharCode(64 + i).toLowerCase()).text(current_state.buttonText[String.fromCharCode(64 + i)]);
+    //         }
+    //     }
+    // }
 
-            if (game_data['states'][current_state]['delay'] == null) {
-                next_state(game_data['states'][current_state]['next_state'])
-            } else {
-                if (game_data['states'][current_state]['show_text'] != null) {
-                    $('#game_text').html(game_data['states'][current_state]['show_text'])
-                }
-                setTimeout(function () {
-                    next_state(game_data['states'][current_state]['next_state'])
-                }, game_data['states'][current_state]['delay']);
-            }
-        }
-    }
+    //
+    // function next_state(state) {
+    //     console.log("Current State = " + current_state + " --> New State= " + state)
+    //     current_state = state
+    //     updateButtonText(state);
+    //
+    //     // Play sound
+    //     if (game_data['states'][current_state]['play_sound'] != null) {
+    //         const audioElement = document.createElement('audio');
+    //         audioElement.setAttribute('src', game_data['states'][current_state]['play_sound']);
+    //         audioElement.play();
+    //     }
+    //     console.log("   -> Was IMAGE CHANGE: " + game_data['states'][current_state]['image_change']);
+    //
+    //     if (game_data['states'][current_state]['text'] != null) {
+    //         $('#game_text').html(game_data['states'][current_state]['text']);
+    //     } else {
+    //         console.log("no text");
+    //         if (game_data['states'][current_state]['stim_change'] != null) {
+    //             console.log("+ stim " + game_data['states'][current_state]['stim_change'])
+    //             stim = stim + game_data['states'][current_state]['stim_change']
+    //         }
+    //         if (game_data['states'][current_state]['point_change'] != null) {
+    //             console.log("+ point " + game_data['states'][current_state]['stim_change'])
+    //             points = points + game_data['states'][current_state]['point_change']
+    //         }
+    //         if (game_data['states'][current_state]['image_change'] != null) {
+    //             $("#game_img").html(game_data['states'][current_state]['image_change']);
+    //         }
+    //         if (game_data['states'][current_state]['show_button'] != null) {
+    //             console.log(game_data['states'][current_state]['show_button'])
+    //             $("#but_" + game_data['states'][current_state]['show_button']).show();
+    //         }
+    //         if (game_data['states'][current_state]['restart_cmd'] != null) {
+    //             location.reload();
+    //         }
+    //
+    //         if (game_data['states'][current_state]['delay'] == null) {
+    //             next_state(game_data['states'][current_state]['next_state'])
+    //         } else {
+    //             if (game_data['states'][current_state]['show_text'] != null) {
+    //                 $('#game_text').html(game_data['states'][current_state]['show_text'])
+    //             }
+    //             setTimeout(function () {
+    //                 next_state(game_data['states'][current_state]['next_state'])
+    //             }, game_data['states'][current_state]['delay']);
+    //         }
+    //     }
+    // }
+    //
+    // function pick_a_winner(input_array) {
+    //     return input_array[(Math.floor(Math.random() * input_array.length))];
+    // }
+    //
+    // function key_input(what_key) {
+    //     for (let i = 0; i < game_data['states'][current_state]['next_state'].length; i++) {
+    //         if (what_key === game_data['states'][current_state]['next_state'][i]['key_input']) {
+    //             if (typeof game_data['states'][current_state]['next_state'][i]['state_name'] == "string") {
+    //                 // console.log("Continue Game")
+    //                 next_state(game_data['states'][current_state]['next_state'][i]['state_name'])
+    //             } else {
+    //                 next_state(pick_a_winner(game_data['states'][current_state]['next_state'][i]['state_name']))
+    //             }
+    //         }
+    //     }
+    //
+    //     console.log(what_key);   // DEBUG
+    // }
+    //
+    // function updateButtonText(state) {
+    //     var current_state = game_data['states'][state];
+    //     var choiceCount = current_state['choice_count'] || 0;
+    //     $('.button').hide();
+    //     $('#text_a, #text_b, #text_c').text(''); // Clear all button texts
+    //
+    //     for (let i = 1; i <= choiceCount; i++) {
+    //         $('#but_' + String.fromCharCode(64 + i).toLowerCase()).show();
+    //         if (current_state.buttonText && current_state.buttonText[String.fromCharCode(64 + i)]) {
+    //             $('#text_' + String.fromCharCode(64 + i).toLowerCase()).text(current_state.buttonText[String.fromCharCode(64 + i)]);
+    //         }
+    //     }
+    // }
 
-    function pick_a_winner(input_array) {
-        return input_array[(Math.floor(Math.random() * input_array.length))];
-    }
-
-    function key_input(what_key) {
-        for (let i = 0; i < game_data['states'][current_state]['next_state'].length; i++) {
-            if (what_key === game_data['states'][current_state]['next_state'][i]['key_input']) {
-                if (typeof game_data['states'][current_state]['next_state'][i]['state_name'] == "string") {
-                    next_state(game_data['states'][current_state]['next_state'][i]['state_name'])
-                } else {
-                    next_state(pick_a_winner(game_data['states'][current_state]['next_state'][i]['state_name']))
-                }
-            }
-        }
-
-        console.log(what_key);
-    }
 </script>
-</body>
 </html>

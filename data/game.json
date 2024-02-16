@@ -1,50 +1,76 @@
 {
-  "start_state": "start",
+  "start_state": "end_choice",
   "states": {
-    "start": {
-      "text": "Get out of my swamp!<br>Do you go in?<br>A = YES B = NO",
-      "next_state": [
-        {
-          "state_name": "go_in_swamp_stim",
-          "key_input": "A"
-        },
-        {
-          "state_name": [
-            "kill",
-            "run"
-          ],
-          "key_input": "B"
-        }
-      ]
+    "end_choice": {
+      "text": "Make your choice:",
+      "prompt": "Peace or Escalate?",
+      "choice_count": 2,
+      "buttonText": {
+        "A": "Peace",
+        "B": "Escalate"
+      },
+      "trans": {
+        "A": "check_peace",
+        "B": "check_escalate"
+      }
     },
-    "go_in_swamp_stim": {
-      "next_state": [
-        "go_in_swamp"
-      ],
-      "stim_change": 10,
-      "show_button": "c",
-      "point_change": 1,
-      "image_change": "<img src=\"imgs/lord_farquaad_shirtless_by_shrek4ever69_d9ya24f-414w-2x.jpg\">"
+    "check_peace": {
+      "condition": "positive_end > 25",
+      "true_state": "winning_screen",
+      "false_state": "end_choice"
     },
-    "go_in_swamp": {
-      "play_sound": "sound/following.mp3",
-      "show_text": "YOU DIE!!! And are now SHrek Shoes! And Toilet paper!! ",
-      "next_state": "restart",
-      "dope_change": 1,
-      "delay": 1000
+    "check_escalate": {
+      "condition": "negative_end > 25",
+      "true_state": "choice_3",
+      "false_state": "end_choice"
     },
-    "run": {
-      "text": "Run for your life you little screaming toad",
-      "next_state": "start",
-      "stim_change": 1
+
+    "choice_3": {
+      "text": "Choose your strategy:",
+      "choice_count": 3,
+      "buttonText": {
+        "A": "Trad",
+        "B": "Uncon",
+        "C": "Destroy"
+      },
+      "trans": {
+        "A": "trad_state",
+        "B": "uncon_state",
+        "C": "destroy_state"
+      }
     },
-    "kill": {
-      "next_state": "start",
-      "stim_change": 1
+    "trad_state": {
+      "text": "Traditional approach. Choose:",
+      "choice_count": 2,
+      "buttonText": {
+        "A": "Invade",
+        "B": "Air War"
+      },
+      "trans": {
+        "default": "end_choice"
+      }
     },
-    "restart": {
-      "restart_cmd": true
+    "uncon_state": {
+      "text": "Unconventional warfare. Choose:",
+      "choice_count": 3,
+      "buttonText": {
+        "A": "Tactical Nukes",
+        "B": "Bio Weapon",
+        "C": "Chem Weapon"
+      },
+      "trans": {
+        "default": "end_choice"
+      }
+    },
+    "destroy_state": {
+      "text": "RU Launches Nukes",
+      "next_state": "losing_screen"
+    },
+    "winning_screen": {
+      "text": "Peace Achieved"
+    },
+    "losing_screen": {
+      "text": "Game Over"
     }
   }
 }
-
