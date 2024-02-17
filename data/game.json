@@ -1,82 +1,158 @@
 {
-  "start_state": "end_choice",
+  "start_state": "choice_3",
   "states": {
     "end_choice": {
       "text": "Make your choice:",
       "prompt": "Peace or Escalate?",
-      "choice_count": 2,
-      "buttonText": {
-        "A": "Peace",
-        "B": "Escalate"
-      },
-      "trans": {
-        "A": "check_peace",
-        "B": "check_escalate"
+      "current_cycle" : {
+        "4": {
+          "choice_count": 2,
+          "buttonText": {
+            "A": "Peeeeace",
+            "B": "Escalate"
+          },
+          "trans": {
+            "A": "check_peace",
+            "B": "check_escalate"
+          }
+        }
+      }
+    },
+
+    "choice_3": {
+      "text": "Choose your strategy:",
+      "current_cycle" : {
+        "4" : {
+          "choice_count": 3,
+          "buttonText": {
+            "A": "Trad",
+            "B": "Uncon",
+            "C": "Destroy"
+          },
+          "trans": {
+            "A": "trad_state",
+            "B": "uncon_state",
+            "C": "destroy_state"
+          }
+        }
       }
     },
     "check_peace": {
       "choice_count": 0,
       "condition": "positive_end > 25",
-      "condition_value" : 25,
-      "true_state": "winning_screen",
-      "false_state": "end_choice"
+      "condition_value" : 20,
+      "current_cycle" : {
+        "4" : {
+          "calc_outcome": {
+            "1": "winning_screen",
+            "2": "losing_screen",
+            "3": "choice_3"
+          },
+          "outcome_message":{
+            "1": "You have successfully sued for peace!",
+            "2": "Your plea for peace failed, you failed the world",
+            "3": "Your plea for peace failed, but there is still a chance"
+          }
+        }
+      }
     },
     "check_escalate": {
       "choice_count": 0,
       "condition": "negative_end > 25",
-      "condition_value" : 20,
-      "true_state": "choice_3",
-      "false_state": "end_choice"
-    },
-
-    "choice_3": {
-      "text": "Choose your strategy:",
-      "choice_count": 3,
-      "buttonText": {
-        "A": "Trad",
-        "B": "Uncon",
-        "C": "Destroy"
-      },
-      "trans": {
-        "A": "trad_state",
-        "B": "uncon_state",
-        "C": "destroy_state"
+      "condition_value": 20,
+      "current_cycle": {
+        "4": {
+          "calc_outcome": {
+            "1": "choice_3",
+            "2": "losing_screen"
+          },
+          "outcome_message": {
+            "1" : "---- 1 ----",
+            "2" : "---- 2 ----"
+          }
+        }
       }
     },
     "trad_state": {
       "text": "Traditional approach. Choose:",
-      "choice_count": 2,
-      "buttonText": {
-        "A": "Invade",
-        "B": "Air War"
-      },
-      "trans": {
-        "default": "end_choice"
+      "current_cycle": {
+        "4": {
+          "choice_count": 2,
+          "buttonText": {
+            "A": "Invade",
+            "B": "Air War"
+          },
+          "trans": {
+            "A": "invade_choice",
+            "B": "airWar_choice"
+          }
+        }
       }
     },
+    "invade_choice": {
+      "choice_count" : -1,
+      "buttonText": "Continue",
+      "success" : {
+        "sub_text": "Your invasion was a success",
+        "dope" : 4,
+        "end" : 4
+      },
+      "fail": {
+        "sub_text": "Your invasion was a failure",
+        "stim" : 3,
+        "end" : 4
+      },
+      "trans": {
+        "Z": "end_choice"
+      }
+    },
+
     "uncon_state": {
       "text": "Unconventional warfare. Choose:",
-      "choice_count": 3,
-      "buttonText": {
-        "A": "Tactical Nukes",
-        "B": "Bio Weapon",
-        "C": "Chem Weapon"
-      },
-      "trans": {
-        "default": "end_choice"
+      "current_cycle" : {
+        "4": {
+          "choice_count": 3,
+          "buttonText": {
+            "A": "Tactical Nukes",
+            "B": "Bio Weapon",
+            "C": "Chem Weapon"
+          },
+          "trans": {
+            "A": "tacNukes_choice"
+          }
+        }
       }
     },
+
+    "tacNukes_choice": {
+      "choice_count" : -1,
+      "buttonText": "Continue",
+      "success" : {
+        "sub_text": "Your tactical nukes were a success",
+        "dope" : 4,
+        "end" : 4
+      },
+      "fail": {
+        "sub_text": "Your tactical nukes were a failure",
+        "stim" : 3,
+        "end" : 4
+      },
+      "trans": {
+        "Z": "end_choice"
+      }
+    },
+
     "destroy_state": {
-      "choice_count": 0,
+      "choice_count": -1,
       "text": "RU Launches Nukes",
       "next_state": "losing_screen"
     },
     "winning_screen": {
-      "choice_count": 0,
+      "choice_count": -1,
       "text": "Peace Achieved"
     },
     "losing_screen": {
-      "choice_count": 0,
+      "choice_count": -1,
       "text": "Game Over"
     }
   }

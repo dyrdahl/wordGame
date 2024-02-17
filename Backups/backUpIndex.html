@@ -8,7 +8,7 @@
 
 <style>
     body {
-        background-image: url("imgs/world_map.jpg");
+        background-image: url("../imgs/world_map.jpg");
         background-position: left top;
         background-repeat: no-repeat;
         background-size: cover, contain, auto
@@ -86,7 +86,7 @@
         <promptText id="game_text"></promptText>
     </div>
 
-<!--    Load Up Image-->
+    <!--    Load Up Image-->
     <promptText id="game_img"></promptText>
     <promptText id="get_buttons"></promptText>
 
@@ -111,11 +111,305 @@
 
 
 <div id="splash" style="font-size:100px"> Loading...<br>
-    <img src="imgs/mario.gif" alt="">
+    <img src="../imgs/mario.gif" alt="">
 </div>
 
 <div id="splashy" style="font-size:100px;color:white;display:none"> Love Hhz<br>
-    <img src="imgs/splashy.jpg" alt="">
+    <img src="../imgs/splashy.jpg" alt="">
+</div>
+
+
+<script>
+    let game_data;
+    let current_state;
+    let positive_end = 15;
+    let negative_end = 15;
+
+    let stim = 0;
+    let dope = 0;
+    let world_heat = 0;
+    let cycle = 4;
+
+    let stateCats = ["trad_state", "uncon_state", "choice_3", "end_choice"];
+
+    setTimeout(function () {
+        $('#main').show();
+        $('#splash').hide();
+        initializeGame();
+    }, 600);
+    function initializeGame(){
+        $.getJSON("data/game.json", function (data) {
+            game_data = data;
+            current_state = data['start_state'];
+            updateState(current_state);
+        });
+    }
+
+    // Update State Function
+    function updateState(state) {
+        current_state = state;
+
+        let stateData = game_data['states'][state];
+
+        $('#game_text').parent('.boxy').show();
+        $('#game_prompt').parent('.boxy').show();
+        $('#choice_outcome').parent('.boxy').hide();
+
+
+        $('#game_text').html(stateData.text || '');
+        $('#game_prompt').html(stateData.prompt || '');
+
+        // Update Buttons
+        updateButtons(stateData, current_state);
+
+        let conditionMet = null;
+        let nextState = null;
+        // let posNextState = null;
+
+        if(current_state === 'check_peace') {
+            let conditionMet = (positive_end > stateData.condition_value) ? 1 : (negative_end > stateData.condition_value) ? 2 : 3;
+            let message = stateData.current_cycle[cycle].outcome_message[conditionMet];
+
+            // Display the outcome message
+            $('#choice_outcome').html(message).show();
+            $('#choice_outcome').parent('.boxy').show();
+
+            // Hide other elements
+            $('#game_text').parent('.boxy').hide();
+            $('#game_prompt').parent('.boxy').hide();
+            $('.verticalButtons').hide();
+
+            // Show the "Continue" button with id 'but_z'
+            $('#but_z').show().one('click', function() {
+                let nextState = stateData.current_cycle[cycle].calc_outcome[conditionMet];
+                updateState(nextState); // Move to the next state when "Continue" is clicked
+            });
+        } else if(current_state === 'check_escalate'){
+            let conditionMet = (negative_end > game_data['states'][state]['condition_value']);
+            let message = stateData['current_cycle'][cycle]['outcome_message'][conditionMet];
+
+            // Display the outcome message
+            $('#choice_outcome').html(message).show();
+            $('#choice_outcome').parent('.boxy').show();
+
+            // Hide other elements
+            $('#game_text').parent('.boxy').hide();
+            $('#game_prompt').parent('.boxy').hide();
+            $('.verticalButtons').hide();
+
+            $('#but_z').show().one('click', function() {
+                let nextState = stateData.current_cycle[cycle].calc_outcome[conditionMet];
+                updateState(nextState); // Move to the next state when "Continue" is clicked
+            });
+
+        }else{
+            // Handle other states as before
+            $('#game_text').html(stateData.text || '');
+            $('#game_prompt').html(stateData.prompt || '');
+            $('#choice_outcome').parent('.boxy').hide();
+            updateButtons(stateData, current_state);
+
+            if (typeof game_data['states'][state]['condition'] !== 'undefined' && game_data['states'][state]['condition'] != null) {
+
+            }else if(current_state === "losing_screen"){
+                $('#game_text').html(stateData.text || '');
+            }
+            else if (!stateCats.includes(current_state)){
+
+                // $('#game_text, #game_prompt').hide()
+                $('#game_text').parent('.boxy').hide();
+                $('#game_prompt').parent('.boxy').hide();
+                $('#choice_outcome').parent('.boxy').show();
+
+                let isSuccess = 0;  // Failure
+
+                let message = isSuccess ? stateData.success['sub_text'] : stateData.fail['sub_text'];
+                if(isSuccess){
+                    dope += stateData.success['dope'];
+                    positive_end += stateData.success['end'];
+                }else{
+                    stim += stateData.fail['stim'];
+                    negative_end += stateData.fail['end'];
+                }
+                $('#choice_outcome').html(message).show();
+            }
+        }
+        if (nextState) {
+            setTimeout(() => updateState(nextState), 50); // Delay for demonstration
+        }
+    }
+    function updateButtons(stateData, currentState) {
+
+        $('.button').hide(); // Hide all buttons initially
+        $('#text_a, #text_b, #text_c').text(''); // Clear button texts
+
+        if(stateData['choice_count'] !== undefined){
+
+            for (let i = 1; i <= stateData['choice_count'] ; i++) {
+                let buttonId = String.fromCharCode(64 + i).toLowerCase(); // Convert 1 to 'a', 2 to 'b', etc.
+
+                $('#but_' + buttonId).show();
+                if (stateData['buttonText']) {
+                    $('#text_' + buttonId).text(stateData['buttonText'][String.fromCharCode(64 + i)]);
+                }
+            }
+            if(stateData['choice_count'] === -1){
+                $('#but_z').show();
+            }
+        }else{
+            for (let i = 1; i <= stateData['current_cycle'][cycle]['choice_count'] ; i++) {
+                let buttonId = String.fromCharCode(64 + i).toLowerCase(); // Convert 1 to 'a', 2 to 'b', etc.
+
+                $('#but_' + buttonId).show();
+                if (stateData['current_cycle'][cycle]['buttonText']) {
+                    $('#text_' + buttonId).text(stateData['current_cycle'][cycle]['buttonText'][String.fromCharCode(64 + i)]);
+                }
+            }
+            if(stateData['current_cycle'][cycle]['choice_count'] === -1){
+                $('#but_z').show();
+            }
+        }
+    }
+
+    $('.button').click(function() {
+        let buttonId = this.id.replace('but_', '').toUpperCase(); // Convert 'but_a' to 'A', for example
+        let nextState = undefined;
+
+
+        if(buttonId === 'Z'){
+            nextState = game_data['states'][current_state]['trans']?.[buttonId] || current_state;
+        }else{
+            nextState = game_data['states'][current_state]['current_cycle'][cycle]['trans']?.[buttonId] || current_state;
+        }
+
+        updateState(nextState);
+    });
+
+</script>
+</html>
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="English">
+<head>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"
+            integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <title></title>
+</head>
+
+<style>
+    body {
+        background-image: url("../imgs/world_map.jpg");
+        background-position: left top;
+        background-repeat: no-repeat;
+        background-size: cover, contain, auto
+    }
+
+    /*Buttons*/
+    .button {
+        display: inline-block;
+        padding: 1px 15px;
+        margin: 5px 5px;
+        font-size: 50px;
+        cursor: crosshair;
+        text-align: center;
+        text-decoration: none;
+        outline: none;
+        color: #fff;
+        border: none;
+        border-radius: 15px;
+        box-shadow: 0 9px #e800ff;
+    }
+    .button:active {
+        background-color: #3e8e41;
+        box-shadow: 0 5px #666;
+        transform: translateY(4px);
+    }
+    .button1 {
+        background-color: #04AA6D;
+    }
+    .button1:hover {background-color: #3e8e41}
+
+    .button2 {
+        background-color: #e50b67;
+    }
+    .button2:hover {background-color: #9b0a41}
+
+    .button3 {
+        background-color: #0b50e5;
+    }
+    .button3:hover {background-color: #1a26a2
+    }
+
+    .button0 {
+        background-color: rgb(253, 0, 0);
+        box-shadow: 0 9px #00a6ff;
+    }
+    .button0:hover {
+        background-color: #790505;
+
+    }
+
+    .verticalButtons {
+        display: flex;
+        flex-direction: column; /* Aligns the children (buttons) vertically */
+        align-items: flex-start; /* Center-aligns the buttons horizontally */
+        padding: 10px; /* Optional: Adds some space inside the container */
+        width: max-content; /* Adjust the width of the container to fit the content */
+    }
+
+    .boxy {
+        border: 5px solid gray;
+        padding: 10px;
+        margin: 10px 5px;
+        width: fit-content;
+        background-color: #f8b6b6;
+    }
+    promptText{
+        font-size:20px;
+        white-space: pre;
+        font-family: "Lucida Console", "Courier New", monospace;
+    }
+</style>
+
+<div id="main" style="display:none">
+    <div class="boxy">
+        <promptText id="game_text"></promptText>
+    </div>
+
+    <!--    Load Up Image-->
+    <promptText id="game_img"></promptText>
+    <promptText id="get_buttons"></promptText>
+
+
+    <div class="boxy">
+        <promptText id="game_prompt"></promptText>
+        <div class="verticalButtons">
+            <button class="button button1" id="but_a">A</button><span id="text_a"></span>
+            <button class="button button2" id="but_b">B</button><span id="text_b"></span>
+            <button class="button button3" id="but_c">C</button><span id="text_c"></span>
+        </div>
+    </div>
+
+    <div class="boxy">
+        <promptText id="choice_outcome"></promptText>
+    </div>
+
+    <button class="button button0" id="but_z">Continue</button><span id="text_z"></span>
+
+</div>
+
+
+
+<div id="splash" style="font-size:100px"> Loading...<br>
+    <img src="../imgs/mario.gif" alt="">
+</div>
+
+<div id="splashy" style="font-size:100px;color:white;display:none"> Love Hhz<br>
+    <img src="../imgs/splashy.jpg" alt="">
 </div>
 
 
@@ -458,7 +752,7 @@
             //     }
             // }
             // if(stateData['choice_count'] === -1){
-                $('#but_z').show();
+            $('#but_z').show();
             // }
         }else if((stateData)['choice_count'] === 0){
             console.log("    DEFINED COUNTS " + stateData['choice_count']);
