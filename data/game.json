@@ -15,12 +15,16 @@
       }
     },
     "check_peace": {
+      "choice_count": 0,
       "condition": "positive_end > 25",
+      "condition_value" : 25,
       "true_state": "winning_screen",
       "false_state": "end_choice"
     },
     "check_escalate": {
+      "choice_count": 0,
       "condition": "negative_end > 25",
+      "condition_value" : 20,
       "true_state": "choice_3",
       "false_state": "end_choice"
     },
@@ -63,13 +67,16 @@
       }
     },
     "destroy_state": {
+      "choice_count": 0,
       "text": "RU Launches Nukes",
       "next_state": "losing_screen"
     },
     "winning_screen": {
+      "choice_count": 0,
       "text": "Peace Achieved"
     },
     "losing_screen": {
+      "choice_count": 0,
       "text": "Game Over"
     }
   }
