@@ -1,0 +1,303 @@
+{
+  "start_state": "start_game",
+  "states": {
+    "start_game": {
+      "text" : "You, the USA, and you must defeat Russia.",
+      "choice_count": -1,
+      "buttonText" : "Start Game",
+      "imagePath" : "imgs/start_US.jpg",
+      "buttonColor": "green",
+      "trans": {
+        "Z": "choice"
+      }
+    },
+    "end_choice": {
+      "text": "Make your choice:",
+      "prompt": "Peace or Escalate?",
+      "current_cycle" : {
+        "1": {},
+        "2": {},
+        "3": {},
+        "4": {
+          "choice_count": 2,
+          "buttonText": {
+            "A": "Peace",
+            "B": "Escalate"
+          },
+          "trans": {
+            "A": "check_peace",
+            "B": "check_escalate"
+          }
+        }
+      }
+    },
+
+    "choice": {
+      "current_cycle" : {
+        "1": {},
+        "2": {},
+        "3": {
+          "text": "War Is Imminent. What Do You Do?",
+          "choice_count": 2,
+          "buttonText": {
+            "A": "Traditional",
+            "B": "Unconventional"
+          },
+          "trans": {
+            "A": "trad_state",
+            "B": "unconventional_state"
+          }
+        },
+        "4" : {
+          "text": "Choose yo strategy:",
+          "choice_count": 3,
+          "buttonText": {
+            "A": "Traditional",
+            "B": "Unconventional",
+            "C": "Destroy Entire Russian Military"
+          },
+          "trans": {
+            "A": "trad_state",
+            "B": "unconventional_state",
+            "C": "destroy_state"
+          }
+        }
+      }
+    },
+    "check_peace": {
+      "choice_count": 0,
+      "condition": "positive_end > 25",
+      "current_cycle" : {
+        "1": {},
+        "2": {},
+        "3": {},
+        "4" : {
+          "condition_value" : 5,
+          "calc_outcome": {
+            "1": "winning_screen",
+            "2": "losing_screen",
+            "3": "choice"
+          },
+          "outcome_message":{
+            "1": "You have successfully sued for peace!",
+            "2": "Your plea for peace failed, you failed the world",
+            "3": "Your plea for peace failed, but there is still a chance"
+          }
+        }
+      }
+    },
+    "check_escalate": {
+      "choice_count": 0,
+      "condition": "negative_end > 25",
+      "current_cycle": {
+        "1": {},
+        "2": {},
+        "3": {},
+        "4": {
+          "condition_value": 5,
+          "calc_outcome": {
+            "1": "choice",
+            "2": "losing_screen"
+          },
+          "outcome_message": {
+            "1" : "There is more you can still do",
+            "2" : "You have failed the world"
+          }
+        }
+      }
+    },
+    "trad_state": {
+      "text": "Traditional approach. Choose:",
+      "current_cycle": {
+        "1": {},
+        "2": {},
+        "3": {
+          "choice_count": 3,
+          "buttonText": {
+            "A": "Provide Weapons (Advanced)",
+            "B": "Covert SF Raids",
+            "C": "Hire Mercenaries"
+          },
+          "trans": {
+            "A": "weaponsAdv_choice",
+            "B": "sfRaids_choice",
+            "C": "mercenary_choice"
+          }
+        },
+        "4": {
+          "choice_count": 2,
+          "buttonText": {
+            "A": "Invade",
+            "B": "Air War"
+          },
+          "trans": {
+            "A": "invade_choice",
+            "B": "airWar_choice"
+          }
+        }
+      }
+    },
+    "mercenary_choice": {
+      "choice_count" : -1,
+      "buttonText": "Continue",
+      "success" : {
+        "sub_text": "Your mercenaries were a success",
+        "dope" : 3,
+        "end" : 4
+      },
+      "fail": {
+        "sub_text": "Your mercenaries were a failure",
+        "stim" : 2,
+        "end" : 4
+      },
+      "trans": {
+        "Z": "end_choice"
+      }
+    },
+
+
+
+    "invade_choice": {
+      "choice_count" : -1,
+      "buttonText": "Continue",
+      "success" : {
+        "sub_text": "Your invasion was a success",
+        "dope" : 4,
+        "end" : 4
+      },
+      "fail": {
+        "sub_text": "Your invasion was a failure",
+        "stim" : 3,
+        "end" : 4
+      },
+      "trans": {
+        "Z": "end_choice"
+      }
+    },
+    "airWar_choice": {
+      "choice_count" : -1,
+      "buttonText": "Continue",
+      "probability" : 0.6,
+      "success" : {
+        "sub_text": "Your [air war] was a success",
+        "dope" : 4,
+        "end" : 4
+      },
+      "fail": {
+        "sub_text": "Your [air war] was a failure",
+        "stim" : 3,
+        "end" : 4
+      },
+      "trans": {
+        "Z": "end_choice"
+      }
+    },
+
+    "unconventional_state": {
+      "text": "Unconventional warfare. Choose:",
+      "current_cycle" : {
+        "1": {},
+        "2": {},
+        "3": {},
+        "4": {
+          "choice_count": 3,
+          "buttonText": {
+            "A": "Tactical Nukes",
+            "B": "Biological Weapon",
+            "C": "Chemical Weapon"
+          },
+          "trans": {
+            "A": "tacNukes_choice",
+            "B": "bio_choice",
+            "C": "chemical_choice"
+          }
+        }
+      }
+    },
+
+    "tacNukes_choice": {
+      "choice_count" : -1,
+      "buttonText": "Continue",
+      "probability" : 0.25,
+      "success" : {
+        "sub_text": "Your tactical nukes were a success",
+        "dope" : 4,
+        "end" : 4
+      },
+      "fail": {
+        "sub_text": "Your tactical nukes were a failure",
+        "stim" : 3,
+        "end" : 4
+      },
+      "trans": {
+        "Z": "end_choice"
+      }
+    },
+    "bio_choice": {
+      "choice_count" : -1,
+      "buttonText": "Continue",
+      "probability" : 0.1,
+      "success" : {
+        "sub_text": "You are a monster! But the biological strike was a success",
+        "dope" : 4,
+        "end" : 4
+      },
+      "fail": {
+        "sub_text": "You are a monster! Your biological strike was a failure",
+        "stim" : 3,
+        "end" : 4
+      },
+      "trans": {
+        "Z": "end_choice"
+      }
+    },
+    "chemical_choice": {
+      "choice_count" : -1,
+      "buttonText": "Continue",
+      "probability" : 0.15,
+      "imagePath" : "imgs/child_gas.jpg",
+      "success" : {
+        "sub_text": "Your chemical strike was a success",
+        "dope" : 4,
+        "end" : 4
+      },
+      "fail": {
+        "sub_text": "Your chemical strike was a failure",
+        "stim" : 3,
+        "end" : 4
+      },
+      "trans": {
+        "Z": "end_choice"
+      }
+    },
+
+    "destroy_state": {
+      "choice_count": -1,
+      "text": "RU Launches Nukes",
+      "buttonText" : "YOU FUCKED UP",
+      "imagePath" : "imgs/nuke_boom.gif",
+      "trans": {
+        "Z": "losing_screen"
+      }
+    },
+    "winning_screen": {
+      "choice_count": -1,
+      "text": "Peace Achieved",
+      "buttonText" : "Start Over & Try Again",
+      "buttonColor" : "teal",
+      "imagePath" : "imgs/victory.gif",
+      "trans": {
+        "Z": "start_game"
+      }
+    },
+    "losing_screen": {
+      "buttonText" : "Start Over & Try Again",
+      "buttonColor" : "orange",
+      "choice_count": -1,
+      "text": "Game Over",
+      "trans": {
+        "Z": "start_game"
+      }
+    }
+  }
+}
