@@ -1,14 +1,76 @@
 {
-  "start_state": "choice_3",
+  "start_state": "start_game",
   "states": {
+    "start_game": {
+      "text" : "You, the USA, and you must defeat Russia.",
+      "choice_count": -1,
+      "buttonText" : "Start Game",
+      "imagePath" : "imgs/start_US.jpg",
+      "buttonColor": "green",
+      "trans": {
+        "Z": "briefing"
+      }
+    },
+    "briefing": {
+      "text" : "Precursor:",
+      "choice_count": -1,
+      "buttonText" : "Next",
+      "buttonColor": "green",
+      "trans": {
+        "Z": "enemy_action"
+      }
+    },
+    "enemy_action": {
+      "text" : "Actions taken by Russia:",
+      "choice_count": -1,
+      "buttonText" : "Next",
+      "imagePath" : "",
+      "buttonColor": "green",
+      "trans": {
+        "Z": "choice"
+      }
+    },
     "end_choice": {
       "text": "Make your choice:",
       "prompt": "Peace or Escalate?",
       "current_cycle" : {
+        "1": {
+          "choice_count": 2,
+          "buttonText": {
+            "A": "Peace",
+            "B": "Escalate"
+          },
+          "trans": {
+            "A": "check_peace",
+            "B": "check_escalate"
+          }
+        },
+        "2": {
+          "choice_count": 2,
+          "buttonText": {
+            "A": "Peace",
+            "B": "Escalate"
+          },
+          "trans": {
+            "A": "check_peace",
+            "B": "check_escalate"
+          }
+        },
+        "3": {
+          "choice_count": 2,
+          "buttonText": {
+            "A": "Peace",
+            "B": "Escalate"
+          },
+          "trans": {
+            "A": "check_peace",
+            "B": "check_escalate"
+          }
+        },
         "4": {
           "choice_count": 2,
           "buttonText": {
-            "A": "Peeeeace",
+            "A": "Peace",
             "B": "Escalate"
           },
           "trans": {
@@ -19,19 +81,55 @@
       }
     },
 
-    "choice_3": {
-      "text": "Choose your strategy:",
+    "choice": {
       "current_cycle" : {
-        "4" : {
-          "choice_count": 3,
+        "1": {
+          "text": "Tensions in the world are rising. What type of response would you like?",
+          "choice_count": 2,
           "buttonText": {
-            "A": "Trad",
-            "B": "Uncon",
-            "C": "Destroy"
+            "A": "Passive",
+            "B": "Aggressive"
           },
           "trans": {
             "A": "trad_state",
-            "B": "uncon_state",
+            "B": "unconventional_state"
+          }
+        },
+        "2": {
+          "text": "Tensions in the world are rising. What Do You Do?",
+          "choice_count": 2,
+          "buttonText": {
+            "A": "Aggressive",
+            "B": "Passive"
+          },
+          "trans": {
+            "A": "trad_state",
+            "B": "unconventional_state"
+          }
+        },
+        "3": {
+          "text": "War Is Imminent. What Do You Do?",
+          "choice_count": 2,
+          "buttonText": {
+            "A": "Traditional",
+            "B": "Unconventional"
+          },
+          "trans": {
+            "A": "trad_state",
+            "B": "unconventional_state"
+          }
+        },
+        "4" : {
+          "text": "Choose yo strategy:",
+          "choice_count": 3,
+          "buttonText": {
+            "A": "Traditional",
+            "B": "Unconventional",
+            "C": "Destroy Entire Russian Military"
+          },
+          "trans": {
+            "A": "trad_state",
+            "B": "unconventional_state",
             "C": "destroy_state"
           }
         }
@@ -40,13 +138,52 @@
     "check_peace": {
       "choice_count": 0,
       "condition": "positive_end > 25",
-      "condition_value" : 20,
       "current_cycle" : {
+        "1": {
+          "condition_value" : 20,
+          "calc_outcome": {
+            "1": "winning_screen",
+            "2": "cycle_increase",
+            "3": "choice"
+          },
+          "outcome_message":{
+            "1": "You have successfully sued for peace!",
+            "2": "Your plea for peace failed, tensions are now rising!",
+            "3": "Your plea for peace failed, but there is still a chance"
+          }
+        },
+        "2": {
+          "condition_value" : 20,
+          "calc_outcome": {
+            "1": "winning_screen",
+            "2": "cycle_increase",
+            "3": "choice"
+          },
+          "outcome_message":{
+            "1": "You have successfully sued for peace!",
+            "2": "Your plea for peace failed, tensions are now rising!",
+            "3": "Your plea for peace failed, but there is still a chance"
+          }
+        },
+        "3": {
+          "condition_value" : 20,
+          "calc_outcome": {
+            "1": "winning_screen",
+            "2": "cycle_increase",
+            "3": "choice"
+          },
+          "outcome_message":{
+            "1": "You have successfully sued for peace!",
+            "2": "Your plea for peace failed, tensions are now rising!",
+            "3": "Your plea for peace failed, but there is still a chance"
+          }
+        },
         "4" : {
+          "condition_value" : 5,
           "calc_outcome": {
             "1": "winning_screen",
             "2": "losing_screen",
-            "3": "choice_3"
+            "3": "choice"
           },
           "outcome_message":{
             "1": "You have successfully sued for peace!",
@@ -56,19 +193,73 @@
         }
       }
     },
+    "cycle_increase": {
+      "choice_count": -1,
+      "trans": "choice",
+      "buttonText" : "Next",
+      "buttonColor": "green",
+      "current_cycle": {
+        "1": {
+          "transition_message": "Don't poke the bear!"
+        },
+        "2": {
+          "imagePath" : "imgs/nuke_boom.gif",
+          "transition_message": "My confidence in you is dwindling"
+        },
+        "3": {
+          "transition_message": "All out war has broken out!"
+        },
+        "4": {
+          "transition_message": "You are a fucking idiot!"
+        }
+      }
+    },
+
     "check_escalate": {
       "choice_count": 0,
       "condition": "negative_end > 25",
-      "condition_value": 20,
       "current_cycle": {
-        "4": {
+        "1": {
+          "condition_value": 2,
           "calc_outcome": {
-            "1": "choice_3",
+            "1": "choice",
+            "2": "cycle_increase"
+          },
+          "outcome_message": {
+            "1" : "There is more you can still do",
+            "2" : "Tensions are building!"
+          }},
+        "2": {
+          "condition_value": 2,
+          "calc_outcome": {
+            "1": "choice",
+            "2": "cycle_increase"
+          },
+          "outcome_message": {
+            "1" : "There is more you can still do",
+            "2" : "Things are getting spicier"
+          }
+        },
+        "3": {
+          "condition_value": 2,
+          "calc_outcome": {
+            "1": "choice",
+            "2": "cycle_increase"
+          },
+          "outcome_message": {
+            "1" : "There is more you can still do",
+            "2" : "Things are getting spicier"
+          }
+        },
+        "4": {
+          "condition_value": 5,
+          "calc_outcome": {
+            "1": "choice",
             "2": "losing_screen"
           },
           "outcome_message": {
-            "1" : "---- 1 ----",
-            "2" : "---- 2 ----"
+            "1" : "There is more you can still do",
+            "2" : "You have failed the world"
           }
         }
       }
@@ -76,19 +267,232 @@
     "trad_state": {
       "text": "Traditional approach. Choose:",
       "current_cycle": {
+        "1": {
+          "choice_count": 3,
+          "buttonText": {
+            "A": "Send in the spies",
+            "B": "[[temporary replace this text]]",
+            "C": "Deploy the carriers",
+            "Z": "Go Back"
+          },
+          "trans": {
+            "A": "spy_choice",
+            "B": "temp_choice",
+            "C": "carriers_choice",
+            "Z": "choice"
+          }
+        },
+        "2": {
+          "choice_count": 3,
+          "buttonText": {
+            "A": "Provide simple weapon systems to [target nation]",
+            "B": "Provide military training to [target nation]",
+            "C": "Sabotage Russia [Kinetic]",
+            "Z": "Go Back"
+          },
+          "trans": {
+            "A": "weaponsSimple_choice",
+            "B": "milTrain_choice",
+            "C": "sabotageKinetic_choice",
+            "Z": "choice"
+          }
+        },
+        "3": {
+          "choice_count": 3,
+          "buttonText": {
+            "A": "Provide Weapons (Advanced)",
+            "B": "Covert SF Raids",
+            "C": "Hire Mercenaries",
+            "Z": "Go Back"
+          },
+          "trans": {
+            "A": "weaponsAdv_choice",
+            "B": "sfRaids_choice",
+            "C": "mercenary_choice",
+            "Z": "choice"
+          }
+        },
         "4": {
           "choice_count": 2,
           "buttonText": {
             "A": "Invade",
-            "B": "Air War"
+            "B": "Air War",
+            "Z": "GOOO BACK"
           },
           "trans": {
             "A": "invade_choice",
-            "B": "airWar_choice"
+            "B": "airWar_choice",
+            "Z": "choice"
           }
         }
       }
     },
+    "spy_choice": {
+      "choice_count" : -1,
+      "buttonText": "Continue",
+      "probability" : 0.5,
+      "success" : {
+        "sub_text": "Your spies were a success.",
+        "dope" : 3,
+        "end" : 4
+      },
+      "fail": {
+        "sub_text": "Your spies were a failure.",
+        "stim" : 2,
+        "end" : 4
+      },
+      "trans": {
+        "Z": "end_choice"
+      }
+    },
+    "temp_choice": {
+      "choice_count" : -1,
+      "buttonText": "Continue",
+      "probability" : 0.5,
+      "success" : {
+        "sub_text": "[[PLACEHOLDER TEXT]]was a success.",
+        "dope" : 3,
+        "end" : 4
+      },
+      "fail": {
+        "sub_text": "[[PLACEHOLDER TEXT]]was a failure.",
+        "stim" : 2,
+        "end" : 4
+      },
+      "trans": {
+        "Z": "end_choice"
+      }
+    },
+    "carriers_choice": {
+      "choice_count" : -1,
+      "buttonText": "Continue",
+      "probability" : 0.8,
+      "success" : {
+        "sub_text": "Deploying the carriers was a success",
+        "dope" : 3,
+        "end" : 4
+      },
+      "fail": {
+        "sub_text": "Deploying the carriers was a failure and just pissed Russia off more",
+        "stim" : 2,
+        "end" : 4
+      },
+      "trans": {
+        "Z": "end_choice"
+      }
+    },
+
+    "weaponsSimple_choice": {
+      "choice_count" : -1,
+      "buttonText": "Continue",
+      "probability" : 0.8,
+      "success" : {
+        "sub_text": "Providing weapons to Russia's target was a success.",
+        "dope" : 3,
+        "end" : 4
+      },
+      "fail": {
+        "sub_text": "Providing weapons to Russia's target was a failure!",
+        "stim" : 2,
+        "end" : 4
+      },
+      "trans": {
+        "Z": "end_choice"
+      }
+    },
+    "milTrain_choice": {
+      "choice_count" : -1,
+      "buttonText": "Continue",
+      "probability" : 0.8,
+      "success" : {
+        "sub_text": "Training the military of Russia's target was a success.",
+        "dope" : 3,
+        "end" : 4
+      },
+      "fail": {
+        "sub_text": "Training the military of Russia's target was a failure!",
+        "stim" : 2,
+        "end" : 4
+      },
+      "trans": {
+        "Z": "end_choice"
+      }
+    },
+    "sabotageKinetic_choice": {
+      "choice_count" : -1,
+      "buttonText": "Continue",
+      "probability" : 0.8,
+      "success" : {
+        "sub_text": "Sabotaging [kinetic] Russia was a success.",
+        "dope" : 3,
+        "end" : 4
+      },
+      "fail": {
+        "sub_text": "Sabotaging [kinetic] Russia was a failure!",
+        "stim" : 2,
+        "end" : 4
+      },
+      "trans": {
+        "Z": "end_choice"
+      }
+    },
+    "weaponsAdv_choice": {
+      "choice_count" : -1,
+      "buttonText": "Continue",
+      "probability" : 0.34,
+      "success" : {
+        "sub_text": "Your advanced weapons turned the tide and were a success",
+        "dope" : 3,
+        "end" : 4
+      },
+      "fail": {
+        "sub_text": "Your advanced weapons failed to help and were a failure",
+        "stim" : 2,
+        "end" : 4
+      },
+      "trans": {
+        "Z": "end_choice"
+      }
+    },
+    "sfRaids_choice": {
+      "choice_count" : -1,
+      "buttonText": "Continue",
+      "probability" : 0.5,
+      "success" : {
+        "sub_text": "Your SF raids were a success",
+        "dope" : 3,
+        "end" : 4
+      },
+      "fail": {
+        "sub_text": "Your SF raids were a failure",
+        "stim" : 2,
+        "end" : 4
+      },
+      "trans": {
+        "Z": "end_choice"
+      }
+    },
+    "mercenary_choice": {
+      "choice_count" : -1,
+      "buttonText": "Continue",
+      "probability" : 0.5,
+      "success" : {
+        "sub_text": "Your mercenaries were a success",
+        "dope" : 3,
+        "end" : 4
+      },
+      "fail": {
+        "sub_text": "Your mercenaries were a failure",
+        "stim" : 2,
+        "end" : 4
+      },
+      "trans": {
+        "Z": "end_choice"
+      }
+    },
+
+
+
     "invade_choice": {
       "choice_count" : -1,
       "buttonText": "Continue",
@@ -106,27 +510,258 @@
         "Z": "end_choice"
       }
     },
+    "airWar_choice": {
+      "choice_count" : -1,
+      "buttonText": "Continue",
+      "probability" : 0.6,
+      "success" : {
+        "sub_text": "Your [air war] was a success",
+        "dope" : 4,
+        "end" : 4
+      },
+      "fail": {
+        "sub_text": "Your [air war] was a failure",
+        "stim" : 3,
+        "end" : 4
+      },
+      "trans": {
+        "Z": "end_choice"
+      }
+    },
 
-    "uncon_state": {
+    "unconventional_state": {
       "text": "Unconventional warfare. Choose:",
       "current_cycle" : {
+        "1": {
+          "choice_count": 3,
+          "buttonText": {
+            "A": "Develop/Unveil a supremely advanced weapon technology",
+            "B": "Unleash targeted propaganda",
+            "C": "Harsh warning",
+            "Z": "Go Back"
+          },
+          "trans": {
+            "A": "weapon_choice",
+            "B": "propaganda_choice",
+            "C": "warn_choice",
+            "Z": "choice"
+          }
+        },
+        "2": {
+          "choice_count": 3,
+          "buttonText": {
+            "A": "Impose sanctions",
+            "B": "Implement a naval blockade",
+            "C": "Conduct electronic warfare, hack their military",
+            "Z": "Go Back"
+          },
+          "trans": {
+            "A": "sanctions_choice",
+            "B": "blockade_choice",
+            "C": "sabotageCyber_choice",
+            "Z": "choice"
+          }
+        },
+        "3": {
+          "choice_count": 3,
+          "buttonText": {
+            "A": "CIA Destabilize",
+            "B": "False Flag",
+            "C": "Sabotage Infrastructure",
+            "Z": "Go Back"
+          },
+          "trans": {
+            "A": "destableCIA_choice",
+            "B": "falseFlag_choice",
+            "C": "sabotageInfra_choice",
+            "Z": "choice"
+          }
+        },
         "4": {
           "choice_count": 3,
           "buttonText": {
             "A": "Tactical Nukes",
-            "B": "Bio Weapon",
-            "C": "Chem Weapon"
+            "B": "Biological Weapon",
+            "C": "Chemical Weapon",
+            "Z": "Go Back"
           },
           "trans": {
-            "A": "tacNukes_choice"
+            "A": "tacNukes_choice",
+            "B": "bio_choice",
+            "C": "chemical_choice",
+            "Z": "choice"
           }
         }
+      }
+    },
+    "weapon_choice": {
+      "choice_count" : -1,
+      "buttonText": "Continue",
+      "probability" : 0.5,
+      "success" : {
+        "sub_text": "Your advanced weaponry has Russia trembling in fear!",
+        "dope" : 3,
+        "end" : 4
+      },
+      "fail": {
+        "sub_text": "Your advanced weaponry failed to scare Russia.",
+        "stim" : 2,
+        "end" : 4
+      },
+      "trans": {
+        "Z": "end_choice"
+      }
+    },
+    "propaganda_choice": {
+      "choice_count" : -1,
+      "buttonText": "Continue",
+      "probability" : 0.5,
+      "success" : {
+        "sub_text": "Your propaganda was a success",
+        "dope" : 3,
+        "end" : 4
+      },
+      "fail": {
+        "sub_text": "Your propaganda was a failure and just pissed Russia off more",
+        "stim" : 2,
+        "end" : 4
+      },
+      "trans": {
+        "Z": "end_choice"
+      }
+    },
+    "warn_choice": {
+      "choice_count" : -1,
+      "buttonText": "Continue",
+      "probability" : 0.5,
+      "success" : {
+        "sub_text": "Your harsh warning was a success",
+        "dope" : 3,
+        "end" : 4
+      },
+      "fail": {
+        "sub_text": "Your harsh warning was a failure and just pissed Russia off more",
+        "stim" : 2,
+        "end" : 4
+      },
+      "trans": {
+        "Z": "end_choice"
+      }
+    },
+
+    "sanctions_choice": {
+      "choice_count" : -1,
+      "buttonText": "Continue",
+      "probability" : 0.24,
+      "success" : {
+        "sub_text": "Imposing sanctions on Russia's assets was a total success",
+        "dope" : 4,
+        "end" : 4
+      },
+      "fail": {
+        "sub_text": "Imposing sanctions on Russia's assets was a complete failure",
+        "stim" : 3,
+        "end" : 4
+      },
+      "trans": {
+        "Z": "end_choice"
+      }
+    },
+    "blockade_choice": {
+      "choice_count" : -1,
+      "buttonText": "Continue",
+      "probability" : 0.24,
+      "success" : {
+        "sub_text": "Blockading Russia's shoreline and overseas assets was a total success",
+        "dope" : 4,
+        "end" : 4
+      },
+      "fail": {
+        "sub_text": "Blockading Russia's shoreline and overseas assets was a complete failure",
+        "stim" : 3,
+        "end" : 4
+      },
+      "trans": {
+        "Z": "end_choice"
+      }
+    },
+    "sabotageCyber_choice": {
+      "choice_count" : -1,
+      "buttonText": "Continue",
+      "probability" : 0.24,
+      "success" : {
+        "sub_text": "Using electronic warfare to hack Russia's military was a total success",
+        "dope" : 4,
+        "end" : 4
+      },
+      "fail": {
+        "sub_text": "Using electronic warfare to hack Russia's military was a complete failure",
+        "stim" : 3,
+        "end" : 4
+      },
+      "trans": {
+        "Z": "end_choice"
+      }
+    },
+    "destableCIA_choice": {
+      "choice_count" : -1,
+      "buttonText": "Continue",
+      "probability" : 0.24,
+      "success" : {
+        "sub_text": "Using the CIA to destabilize was a total success",
+        "dope" : 4,
+        "end" : 4
+      },
+      "fail": {
+        "sub_text": "Using the CIA to destabilize was a complete failure",
+        "stim" : 3,
+        "end" : 4
+      },
+      "trans": {
+        "Z": "end_choice"
+      }
+    },
+    "falseFlag_choice": {
+      "choice_count" : -1,
+      "buttonText": "Continue",
+      "probability" : 0.3,
+      "success" : {
+        "sub_text": "False flag was a total success",
+        "dope" : 4,
+        "end" : 4
+      },
+      "fail": {
+        "sub_text": "False flag was a complete failure",
+        "stim" : 3,
+        "end" : 4
+      },
+      "trans": {
+        "Z": "end_choice"
+      }
+    },
+    "sabotageInfra_choice": {
+      "choice_count" : -1,
+      "buttonText": "Continue",
+      "probability" : 0.4,
+      "success" : {
+        "sub_text": "Sabotaging infrastructure was a total success",
+        "dope" : 4,
+        "end" : 4
+      },
+      "fail": {
+        "sub_text": "Sabotaging infrastructure was a complete failure",
+        "stim" : 3,
+        "end" : 4
+      },
+      "trans": {
+        "Z": "end_choice"
       }
     },
 
     "tacNukes_choice": {
       "choice_count" : -1,
       "buttonText": "Continue",
+      "probability" : 0.25,
       "success" : {
         "sub_text": "Your tactical nukes were a success",
         "dope" : 4,
@@ -141,19 +776,101 @@
         "Z": "end_choice"
       }
     },
+    "bio_choice": {
+      "choice_count" : -1,
+      "buttonText": "Continue",
+      "probability" : 0.1,
+      "success" : {
+        "sub_text": "You are a monster! But the biological strike was a success",
+        "dope" : 4,
+        "end" : 4
+      },
+      "fail": {
+        "sub_text": "You are a monster! Your biological strike was a failure",
+        "stim" : 3,
+        "end" : 4
+      },
+      "trans": {
+        "Z": "end_choice"
+      }
+    },
+    "chemical_choice": {
+      "choice_count" : -1,
+      "buttonText": "Continue",
+      "probability" : 0.15,
+      "imagePath" : "imgs/child_gas.jpg",
+      "success" : {
+        "sub_text": "Your chemical strike was a success",
+        "dope" : 4,
+        "end" : 4
+      },
+      "fail": {
+        "sub_text": "Your chemical strike was a failure",
+        "stim" : 3,
+        "end" : 4
+      },
+      "trans": {
+        "Z": "end_choice"
+      }
+    },
 
     "destroy_state": {
       "choice_count": -1,
       "text": "RU Launches Nukes",
-      "next_state": "losing_screen"
+      "buttonText" : "YOU FUCKED UP",
+      "imagePath" : "imgs/nuke_boom.gif",
+      "trans": {
+        "Z": "losing_screen"
+      }
     },
     "winning_screen": {
       "choice_count": -1,
-      "text": "Peace Achieved"
+      "text": "Peace Achieved",
+      "buttonText" : "Start Over & Try Again",
+      "buttonColor" : "teal",
+      "imagePath" : "imgs/victory.gif",
+      "trans": {
+        "Z": "start_game"
+      }
     },
     "losing_screen": {
+      "buttonText" : "Start Over & Try Again",
+      "buttonColor" : "orange",
       "choice_count": -1,
-      "text": "Game Over"
+      "text": "Game Over",
+      "trans": {
+        "Z": "start_game"
+      }
+    }
+  },
+  "nations": {
+    "number": 2,
+    "1": {
+      "nation_num": 2,
+      "1": "Estonia",
+      "2": "Latvia"
+    },
+    "2": {
+      "nation_num": 3,
+      "1": "Moldova",
+      "2": "Ukraine",
+      "3": "Sweden"
+    }
+  },
+  "precursors": {
+    "number": 3,
+    "1": "The world has successfully added a new member to NATO.",
+    "2": "The United States has deployed a new, highly advanced weapon system in Europe, very close to Russia.",
+    "3": "Russia's sphere of influence has greatly diminished recently and they are becoming desperate to be relevant again."
+  },
+  "enemy_response": {
+    "number": 3,
+    "1": "Russia is massing troops on the border of ",
+    "2": "Russia is funding and supporting proxy's in ",
+    "3": {
+      "choices": 2,
+      "1": "Hypersonic Missile",
+      "2": "Silent Nuclear Tipped Torpedo"
     }
   }
 }
