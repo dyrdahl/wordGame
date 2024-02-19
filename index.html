@@ -157,13 +157,53 @@
     <img src="imgs/splashy.jpg" alt="">
 </div>
 
+<!--   World Temperature Gauge  -->
+<div id="tempGauge" style="width: 300px; height: 150px;"></div>
+<!--<a href="#" id="tempGauge_refresh" class="button grey">Random Refresh</a>-->
+<script src="../raphael.min.js"></script>
+<script src="../justgage.js"></script>
 
 <script>
+
+    // document.addEventListener("DOMContentLoaded", function (event) {
+    var tempGauge = new JustGage({
+        id: "tempGauge",
+        value: 0,
+        min: -50,
+        max: 50,
+        title: "Target",
+        label: "World Temperature",
+        gaugeWidthScale: 1,
+        pointer: true,
+        textRenderer: function (val) {
+            if (val > 0) {
+                return 'Peaceful';
+            } else if (val < 0) {
+                return 'WAR';
+            } else if (val === 0) {
+                return 'Normal';
+            }
+        },
+        onAnimationEnd: function () {
+            console.log('f: onAnimationEnd()');
+        }
+    });
+
+        // document.getElementById('gg1_refresh').addEventListener('click', function () {
+        //     tempGauge.refresh(world_heat);
+        //     return false;
+        // });
+    // });
+    // $('#tempGauge').hide();
+
+
+
+
     let game_data;
     let current_state;
 
-    let positive_end = 15;
-    let negative_end = 15;
+    let positive_end = 0;
+    let negative_end = 0;
     let stim = 0;
     let dope = 0;
 
@@ -216,14 +256,24 @@
         // Update State Function
     function updateState(state) {
         current_state = state;
+        if(current_state === 'start_game'){
+            world_heat = 0;
+            positive_end = 0;
+            negative_end = 0;
+            stim = 0;
+            dope = 0;
+            cycle = 1;
+        }
         console.log("___________________________________________________________________________________________________");
         console.log("Current State: " + current_state);
         console.log("     ---------------------------------------");
         console.log("     | Dope: " + dope + "        ||        Stim: " + stim);
         console.log("     | ENDING:  Positive: " + positive_end + " | Negative: " + negative_end + " |");
+        console.log("     |    worldTEMP: " + world_heat);
         console.log("     ---------------------------------------");
         console.log("             TARGET_NATION: " + targetNation);
         // clearBoard();
+        tempGauge.refresh(world_heat);
 
 
         let stateData = game_data['states'][state];
@@ -277,7 +327,6 @@
             escalatePeace = conditionMet;
 
             // Display the outcome message
-
             $('#choice_outcome').html(message).show();
             $('#choice_outcome').parent('.boxy').show();
 
@@ -327,12 +376,6 @@
             // Check if 'condition' exists in stateData before trying to access it
             if(current_state === 'start_game'){
                 console.log("   2]-----| START_SCREEN |-----");
-                positive_end = 0;
-                negative_end = 0;
-                stim = 0;
-                dope = 0;
-                cycle = 1;
-
                 $('#game_prompt').parent('.boxy').hide();
                 $('#game_text').html(stateData.text || '');
             }
@@ -420,11 +463,10 @@
                 // console.log("        Fail: " + stateData.fail['sub_text']);                                                           // DEBUG EXTRA
                 let message = stateData['current_cycle'][cycle]['text'];
 
+                $('#tempGauge').show();
                 $('#game_text').parent('.boxy').show();
                 $('#game_text').html(message || '');
                 $('.verticalButtons').show();
-
-
             }
             else if(current_state === "cycle_increase"){
                 let message = stateData['current_cycle'][cycle]['transition_message'];
@@ -541,7 +583,7 @@
         console.log("      |=================== Button (" + buttonId + ") Pressed ===================|");
 
         let nextState = undefined;
-
+        updateWorldTemp();
 
         if(buttonId === 'Z'){
             console.log("      ZZZZ: " + current_state);
@@ -573,5 +615,17 @@
         console.log("    ====> " + nextState);
         updateState(nextState);
     });
+
+    function updateWorldTemp(){
+        console.log(" >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> UPDATING WORLD HEAT: ");
+        console.log("                                              Positive: " + positive_end);
+        console.log("                                              Negative: " + negative_end);
+
+        // world_heat = (negative_end + 1) / (positive_end + 1);
+        world_heat = positive_end - negative_end;
+
+        console.log("                                              World Heat: " + world_heat);
+
+    }
 </script>
 </html>
