@@ -3,15 +3,16 @@
 <head>
     <script src="https://code.jquery.com/jquery-3.7.1.js"
             integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
-    <title>World Crisis</title>
+    <title>World Conflict</title>
 </head>
 
 <style>
     body {
-        background-image: url("imgs/world_map3.png");
+        background-image: url("imgs/world_map.png");
         background-position: left top;
         background-repeat: no-repeat;
-        background-size: cover, contain, auto
+        background-size: cover, contain, auto;
+        background-color: black;
     }
 
     /*Buttons*/
@@ -27,7 +28,7 @@
         border: none;
         border-radius: 15px;
         box-shadow: 0 9px rgba(0, 45, 246, 0.32);
-        margin: 8px 20px 8px 8px; /* 2nd is margin between button and text*/
+        margin: 8px 20px 8px 8px;
     }
     .button:active {
         background-color: #3e8e41;
@@ -36,19 +37,17 @@
     }
     .verticalButtons {
         display: flex;
-        flex-direction: column; /* Aligns the children (buttons) vertically */
-        align-items: flex-start; /* Center-aligns the buttons horizontally */
-        width: max-content; /* TODO fix this back to max-content */
+        flex-direction: column;
+        align-items: flex-start;
+        width: max-content;
         margin-bottom: 5px;
     }
     .button_text {
-        font-size: 24px;
+        font-size: 20px;
         font-family: Courier, monospace;
         font-weight: bold;
         color: #000d64;
-        /*margin-left: 10px;*/
     }
-
 
     .button1 {
         background-color: #578650;
@@ -76,10 +75,23 @@
         background-color: #2E86AB;
     }
 
+    .button9 {
+        background-color: #2b9872;
+        box-shadow: 0 9px #0b3d0a;
+        width: 100%;
+        height: 100%;
+    }
+    .button9:hover {
+        background-color: #2E86AB;
+    }
+
     .boxy {
-        border: 5px solid gray;
-        padding: 10px;
-        margin: 10px 5px;
+        background-image: url("imgs/box_texture_3.jpeg");
+        background-position: center center;
+        background-size: cover, contain, auto;
+        border: 2px solid #ff0c0c;
+        padding: 5px;
+        margin: 1px 25px;
         width: fit-content;
         background-color: #f8b6b6;
         word-wrap: break-word;
@@ -89,18 +101,14 @@
         box-sizing: border-box;
     }
     promptText{
-        font-size:30px;
+        font-size:25px;
         white-space: normal;
         font-family: "Palatino Linotype",sans-serif;
         font-weight: bold;
-
+        color: #000000;
+        -webkit-text-stroke-width: thin;
+        -webkit-text-stroke-color: #0e4e57;
     }
-    /*gameText{*/
-    /*    font-size:80px;*/
-    /*    white-space: normal;*/
-    /*    font-family: "Lucida Console", "Courier New", sans-serif;*/
-    /*    font-weight: bold;*/
-    /*}*/
     .button_container {
         display: flex;
         align-items: center;
@@ -111,23 +119,43 @@
         align-items: center;
         justify-content: flex-start;
     }
+    .start_game {
+        background-image: url("imgs/titleScreen.png");
+        position: relative;
+        background-position: left top;
+        background-repeat: no-repeat;
+        background-size: contain;
+        box-sizing: content-box;
+
+        width: 100%;
+        height: 100vh; /* Use viewport height to ensure it covers the whole screen */
+    }
+    .start_game_button {
+        position: absolute;
+        left: 50%;
+        top: 55%;
+        transform: translate(-50%, -50%);
+        width: 285px;
+        height: 60px;
+    }
 </style>
 
-<div id="start_game" style="display:none">
-    <div class="boxy">
-        <promptText id="start_text"></promptText>
-    </div>
-</div>
+
 
 
 
 <div id="main" style="display:none">
+    <div class="start_game">
+        <div class="start_game_button">
+            <button class="button button9" id="but_y"></button>
+        </div>
+    </div>
+
     <div class="boxy">
         <promptText id="game_text"></promptText>
     </div>
 
 
-<!--    Load Up Image-->
     <promptText id="game_img"></promptText>
     <promptText id="get_buttons"></promptText>
 
@@ -154,8 +182,9 @@
                     <span class="button_text" id="text_d"></span>
                 </div>
             </div>
+            <div id="tempGauge" style="width: 300px; height: 150px;"></div>
         </div>
-        <div id="tempGauge" style="width: 300px; height: 150px;"></div>
+
     </div>
 
 
@@ -169,79 +198,59 @@
         <img id="stageImage" src="" alt="Stage Specific Image" style="display:none;">
         <button class="button button0" id="but_z">Continue</button>
     </div>
-
-<!--    <button class="button button0" id="but_z"></button><span id="text_z"></span>-->
-
 </div>
 
-<!--<img id="stageImage" src="" alt="Stage Specific Image" style="display:none;">-->
-
-
-<div id="splash" style="font-size:100px"> Loading...<br>
-    <img src="imgs/mario.gif" alt="">
-</div>
-
-<div id="splashy" style="font-size:100px;color:white;display:none"> Love Hhz<br>
-    <img src="imgs/splashy.jpg" alt="">
-</div>
 
 <!--   World Temperature Gauge  -->
-<!--<a href="#" id="tempGauge_refresh" class="button grey">Random Refresh</a>-->
 <script src="../raphael.min.js"></script>
 <script src="../justgage.js"></script>
 
 <script>
 
-    // document.addEventListener("DOMContentLoaded", function (event) {
+    // Initialize and then hide the world temperature gauge: used a pre-made template because HTML pretty much sucks
     var tempGauge = new JustGage({
         id: "tempGauge",
         value: 0,
-        min: -50,
-        max: 50,
+        min: -20,
+        max: 20,
         title: "Target",
         label: "World Temperature",
+        labelMinFontSize: 18,
+        labelFontColor: "#ecff00",
+        valueFontColor: "#ed47ff",
+        differential: true,
         gaugeWidthScale: 1,
         pointer: true,
         hideMinMax: true,
+        reverse: true,
+        levelColors: ["#ff0000", "#9cb8ff", "#46ff00"],
         textRenderer: function (val) {
-            if (val > 0) {
-                return 'Peaceful';
-            } else if (val < 0) {
+            if (val < 0) {
                 return 'WAR';
+            } else if (val > 0) {
+                return 'Peaceful';
             } else if (val === 0) {
                 return 'Normal';
             }
         },
-        onAnimationEnd: function () {
-            console.log('f: onAnimationEnd()');
-        }
     });
-
-        // document.getElementById('gg1_refresh').addEventListener('click', function () {
-        //     tempGauge.refresh(world_heat);
-        //     return false;
-        // });
-    // });
     $('#tempGauge').hide();
 
-
-
-
+    // Variables
     let game_data;
     let current_state;
-
     let positive_end = 0;
     let negative_end = 0;
     let stim = 0;
     let dope = 0;
 
-    let world_heat = 0;   //TODO show heatmap
+    let world_heat = 0;
     let cycle = 0;
-
-    let escalatePeace = null;
 
     let stateCats = ["trad_state", "unconventional_state", "end_choice", "destroy_state"];
 
+    // Variables that are used throughout...still not sure that this is done properly
+    let escalatePeace = null;
     let targetNation = null;
     let conflictPrecursor = null;
     let enemyAction = null;
@@ -250,41 +259,21 @@
     let numNation = null;
     let randNation = null;
 
-
     setTimeout(function () {
         $('#main').show();
-        $('#splash').hide();
+        // $('#splash').hide();
         initializeGame();
     }, 600);
     function initializeGame(){
         $.getJSON("data/game.json", function (data) {
             game_data = data;
             current_state = data['start_state'];
-            console.log("=-_=-_=-_=-_=-_=-_=-_=-_=-_ NEW GAME _-=_-=_-=_-=_-=_-=_-=_-=")
-                    // targetNation = game_data['nations'][(Math.floor(Math.random() * 2) + 1)][(Math.floor(Math.random() * 2) + 1)];
-                    // console.log("   TARGET_NATION: " + targetNation);
-                    //
-                    // conflictPrecursor = game_data['precursors'][(Math.floor(Math.random() * 3) + 1)];
-                    // console.log("   TARGET_NATION: " + conflictPrecursor);
             updateState(current_state);
         });
     }
-    function clearBoard(){
-        $('#start_game').parent('.boxy').hide();
-        $('#game_text').parent('.boxy').hide();
-        $('#game_prompt').parent('.boxy').hide();
-        $('#choice_outcome').parent('.boxy').hide();
-        $('#description_text').parent('.boxy').hide();
-        $('.verticalButtons').hide();
-        $('.button').hide();
-    }
 
-
-
-        // Update State Function
     function updateState(state) {
-
-
+        console.log("  UPDATE\nCurrent State: " + current_state);
         current_state = state;
         if(current_state === 'start_game'){
             world_heat = 0;
@@ -302,9 +291,8 @@
         console.log("     |    worldTEMP: " + world_heat);
         console.log("     ---------------------------------------");
         console.log("             TARGET_NATION: " + targetNation);
-        // clearBoard();
         tempGauge.refresh(world_heat);
-
+        $('#tempGauge').hide();
 
         let stateData = game_data['states'][state];
 
@@ -317,79 +305,48 @@
             $('#but_z').css('background-color', stateData['buttonColor']);
         }
 
-        // Image Loader
         if (stateData['imagePath']) {
-            document.getElementById('stageImage').src = stateData['imagePath'];
-            document.getElementById('stageImage').style.display = 'block';
+            document.body.style.backgroundImage = `url('${stateData['imagePath']}')`;
         } else if (stateData['current_cycle'] && stateData['current_cycle'][cycle] && stateData['current_cycle'][cycle]['imagePath']) {
-            document.getElementById('stageImage').src = stateData['current_cycle'][cycle]['imagePath'];
-            document.getElementById('stageImage').style.display = 'block';
+            document.body.style.backgroundImage = `url('${stateData['current_cycle'][cycle]['imagePath']}')`;
         }
         else {
-            document.getElementById('stageImage').style.display = 'none';
+            document.body.style.backgroundImage = `url('${"imgs/world_map.png"}')`;
         }
 
-        // clearBoard();   // DEBUG
-
-        // Update Buttons
         updateButtons(stateData, current_state);
-
-        // console.log("CurrentCondition: " + game_data['states'][state]['condition'])    // DEBUG EXTRA
-        $('#tempGauge').hide();
-
 
         let conditionMet = null;
         let nextState = null;
-        // let posNextState = null;
-        // stateDate = game_data['states'][state]
+
         if(current_state === 'check_peace') {
-            // console.log("    * * * Checking Peace");    // DEBUG_STATES
-            // console.log("         Pos_Cond: Is " + positive_end + " > " + game_data['states'][state]['condition_value'] + " || " + (positive_end > game_data['states'][state]['condition_value']));   // DEBUG_STATES
-            // console.log("         Neg_Cond: Is " + negative_end + " > " + game_data['states'][state]['condition_value'] + " || " + (negative_end > game_data['states'][state]['condition_value']));   // DEBUG_STATES
-
-
-            // Determine the condition outcome
             let conditionMet = (positive_end > stateData['current_cycle'][cycle]['condition_value']) ? 1 : (negative_end > game_data['states']['check_escalate']['current_cycle'][cycle]['condition_value']) ? 2 : 3;
             let message = stateData['current_cycle'][cycle]['outcome_message'][conditionMet];
-            console.log("  1]=====| CHECK_PEACE |=====");
-            console.log("    ->>> Condition Met: " + conditionMet);                // DEBUG EXTRA
-            console.log("    ->>>       Message: " + message);                     // DEBUG EXTRA
             escalatePeace = conditionMet;
 
-            // Display the outcome message
             $('#choice_outcome').html(message).show();
             $('#choice_outcome').parent('.boxy').show();
 
-            // Hide other elements
             $('#game_text').parent('.boxy').hide();
             $('#game_prompt').parent('.boxy').hide();
             $('.verticalButtons').hide();
+            if(positive_end < negative_end){
+                positive_end += 2;
+                negative_end += 2;
+            }
 
         } else if(current_state === 'check_escalate'){
-            console.log("  1]=====| CHECK_ESCALATE |=====");
-
-            // Determine the condition outcome
             let conditionMet = (negative_end > stateData['current_cycle'][cycle]['condition_value'])? 2 : 1;
-            console.log("                 " + stateData['current_cycle'][cycle]['condition_value']);
-            console.log("           CONDITION MET: " + conditionMet);                                                   // DEBUG EXTRA
-            console.log("           CYCLE: " + cycle);                                                                  // DEBUG EXTRA
-            console.log("           MESSAGE: " + stateData['current_cycle'][cycle]['outcome_message'][conditionMet]);   // DEBUG EXTRA
-
             let message = stateData['current_cycle'][cycle]['outcome_message'][conditionMet];
             escalatePeace = conditionMet;
 
-            // Display the outcome message
             $('#choice_outcome').html(message).show();
             $('#choice_outcome').parent('.boxy').show();
 
-            // Hide other elements
             $('#game_text').parent('.boxy').hide();
             $('#game_prompt').parent('.boxy').hide();
             $('.verticalButtons').hide();
-
         }else{
-            console.log("  1]=====| CHECK_ALL_OTHER |=====");
-            // Handle other states as before
             $('#game_text').parent('.boxy').show();
             $('#game_prompt').parent('.boxy').show();
             $('#choice_outcome').parent('.boxy').hide();
@@ -400,102 +357,67 @@
 
             $('#description_text').parent('.boxy').hide();
 
-            // updateButtons(stateData, current_state);
-            // console.log(" CURRENT STATE check_all_other: " + current_state);
-
-            // Check if 'condition' exists in stateData before trying to access it
             if(current_state === 'start_game'){
-                console.log("   2]-----| START_SCREEN |-----");
-                $('#game_prompt').parent('.boxy').hide();
-                $('#game_text').html(stateData.text || '');
+                $('.start_game').show();
+                document.body.style.backgroundImage = 'none';
             }
             else if (current_state === 'briefing'){
-                console.log("-=-=-==-=-=--=-=-==-=-=--=-=-==-=-=--=-=-==-=-=-");
+                console.log(" INSIDE BRIEFING: ");
+                document.body.style.backgroundImage = `url('${"imgs/world_map.png"}')`;
+                $('.start_game').parent().hide();
+                $('.start_game').hide();
+                $('#main').show();
+
                 numNATO = game_data['nations']['number'];
-                console.log("     ******** numNATO: " + numNATO);
                 randNATO = (Math.floor(Math.random() * numNATO) + 1);
-                console.log("     randNATO:" + randNATO);
 
                 numNation = game_data['nations'][randNATO]['nation_num'];
-                console.log("     ******** numNation: " + numNation);
                 randNation = (Math.floor(Math.random() * numNation) + 1);
-                console.log("     randNation: " + randNation);
 
                 targetNation = game_data['nations'][randNATO][randNation];
                 conflictPrecursor = game_data['precursors'][(Math.floor(Math.random() * game_data['precursors']['number']) + 1)];
 
-                console.log("           TARGET_NATION: " + targetNation);
-                console.log("           PRECURSOR    : " + conflictPrecursor);
-
                 let message = "This has cause Russia to take unsavory actions.";
 
-                // $('#description_text').show();
                 $('#description_text').parent('.boxy').show();
                 $('#game_text').html(stateData.text || '');
                 $('#game_prompt').html(conflictPrecursor);
                 $('#description_text').html(message);
+                console.log("       ---2--2-2");
 
             }
             else if (current_state === 'enemy_action'){
-                console.log("---== enemy action");
-                console.log("           TARGET_NATION: " + targetNation);
-                console.log("           PRECURSOR    : " + conflictPrecursor);
-
-                // let randomAction = (Math.floor(Math.random() * game_data['enemy_response']['number']) + 1);
                 let randomAction = 3;
-                console.log("   RANDOM ACTIONS: " + randomAction);
                 enemyAction = game_data['enemy_response'][randomAction];
-                console.log("   ENEMY_ACTION: " + enemyAction);
 
                 if(randNATO === 1){
                     negative_end += 10;
                     stim += 10;
                 }
 
-
                 $('#description_text').parent('.boxy').show();
                 $('#game_text').html(stateData.text || '');
                 if(randomAction > 2){
-                    console.log("   ENEMY_ACTION > 2");
-
                     let randomWeapon = (Math.floor(Math.random() * game_data['enemy_response'][randomAction]['choices']) + 1);
-                    let message = "Russia has deployed a " + enemyAction[randomWeapon] + ", and is threatening to use it against " + targetNation
-                    +", who are " + ((randNATO === 1) ? " a member of NATO!" : " not a NATO member.");
-
-                    console.log(" RANDOM WEAPON: " + randomWeapon);
+                    let message = "Russia has deployed a " + enemyAction[randomWeapon] + ", and is threatening to use it against " + targetNation +", who are " + ((randNATO === 1) ? " a member of NATO!" : " not a NATO member.");
 
                     $('#description_text').parent().hide();
                     $('#game_prompt').html(message);
-
-                    // $('#description_text').html(targetNation);
                 }else{
                     let message = targetNation + ((randNATO === 1) ? " NATO MEMBER" : "NON-NATO");
-                    console.log("    MESSAGE " + randNATO);
                     $('#game_prompt').html(enemyAction + message);
                     $('#description_text').html(targetNation);
                 }
-
-
             }else if(current_state === 'end_choice'){
+                $('#button_and_gauge').show();
+                $('#content-section').show();
                 $('#tempGauge').show();
             }
             else if (typeof game_data['states'][state]['condition'] !== 'undefined' && game_data['states'][state]['condition'] != null) {
-                console.log("   2]-----| CONDITION EXISTS |-----");
-
-
-                // console.log("   CURRENT STATE: " + current_state + " || " + game_data['states'][state]['condition']);                                 // DEBUG EXTRA
-                // console.log("   CURRENT SCORES: Posi: " + positive_end + " Neg: " + negative_end);                                                    // DEBUG EXTRA
-                // console.log("   T/F States| T:" + game_data['states'][state]['true_state'] + " F: " + game_data['states'][state]['false_state']);     // DEBUG EXTRA
-
             }
             else if(current_state === 'choice'){
-                console.log("   2]-----| CHOICE_SCREEN |-----");
-                // console.log("     CHOICE WAS:   " + (Boolean(isSuccess) ? "SUCCESS" : "FAILURE"));                                    // DEBUG EXTRA
-                // console.log("        Succ: " + stateData.success['sub_text']);                                                        // DEBUG EXTRA
-                // console.log("        Fail: " + stateData.fail['sub_text']);                                                           // DEBUG EXTRA
                 let message = stateData['current_cycle'][cycle]['text'];
 
-                // $('#tempGauge').show();
                 $('#game_text').parent('.boxy').show();
                 $('#game_text').html(message || '');
                 $('.verticalButtons').show();
@@ -512,37 +434,25 @@
                 cycle += 1;
             }
             else if(current_state === "losing_screen"){
-                console.log("   2]-----| LOSING_SCREEN |-----");
                 $('#game_prompt').parent('.boxy').hide();
                 $('#game_text').html(stateData.text || '');
             }
             else if(current_state === "winning_screen"){
-                console.log("   2]-----| LOSING_SCREEN |-----");
                 $('#game_prompt').parent('.boxy').hide();
                 $('#game_text').html(stateData.text || '');
             }
             else if(current_state === "destroy_state"){
-                console.log("   2]-----| DESTROY_STATE_SCREEN |-----");
                 $('#game_prompt').parent('.boxy').hide();
                 $('#game_text').html(stateData.text || '');
             }
             else if (!stateCats.includes(current_state)){
-                console.log("   2]-----| NOT WITHIN STATE_CATS |-----");
-                // console.log("   ---- We Out Here Baby: " + current_state);                     // DEBUG EXTRA
                 $('#game_text').parent('.boxy').hide();
                 $('#game_prompt').parent('.boxy').hide();
                 $('#choice_outcome').parent('.boxy').show();
 
-                // TODO: Set Randomizer
                 let state_probability = (stateData && 'probability' in stateData) ? stateData.probability : 0.5;
                 let isSuccess = Math.random() < state_probability;
-                console.log("                 Probability: " + state_probability + "    Success? " + isSuccess);
-                // let isSuccess = 1;  // Success
-                // let isSuccess = 0;  // Failure
 
-                // console.log("     CHOICE WAS:   " + (Boolean(isSuccess) ? "SUCCESS" : "FAILURE"));                                    // DEBUG EXTRA
-                // console.log("        Succ: " + stateData.success['sub_text']);                                                        // DEBUG EXTRA
-                // console.log("        Fail: " + stateData.fail['sub_text']);                                                           // DEBUG EXTRA
                 let message = isSuccess ? stateData.success['sub_text'] : stateData.fail['sub_text'];
                 if(isSuccess){
                     dope += stateData.success['dope'];
@@ -552,114 +462,73 @@
                     negative_end += stateData.fail['end'];
                 }
                 $('#choice_outcome').html(message).show();
-                // console.log("    Post-Choice -> Current State: " + current_state);                                                    // DEBUG EXTRA
             }
         }
 
-        // Ensure nextState is defined before attempting to transition
         if (nextState) {
-            console.log(" --> UPDATE NEW NEXT STATE: " + game_data['states'][state]['condition'] );
-            setTimeout(() => updateState(nextState), 50); // Delay for demonstration
+            setTimeout(() => updateState(nextState), 50);
         }
     }
 
-    //  stateCats = ["trad_state", "unconventional_state", "choice_3", "end_choice", "end_game_choice"];
-    // Update Buttons Based on State
     function updateButtons(stateData, currentState) {
-        console.log("       ~~~~~| UPDATE BUTTONS |~~~~~");
+        $('.button').hide();
+        $('#text_a, #text_b, #text_c, #text_d').text('');
+        console.log("       ---====>  Updating Buttons Current State: " + currentState);
 
-        $('.button').hide(); // Hide all buttons initially
-        $('#text_a, #text_b, #text_c, #text_d').text(''); // Clear button texts
-
-
-        console.log("                                 " + currentState);
         if(stateData['choice_count'] !== undefined){
-            console.log("           >>>>>| CHOICE COUNT -1 & 0 |<<<<<");
-
-            console.log("                    DEFINED CHOICE COUNT: " + stateData['choice_count']);                  // DEBUG EXTRA
             if(stateData['choice_count'] === -1){
+                if(currentState === 'start_game'){
+                    $('#but_y').text(stateData['buttonText']);
+                    $('#but_y').show();
+                }else{
+                    $('#but_z').text(stateData['buttonText']);
+                    $('#but_z').show();
+                }
+            }else{
                 $('#but_z').text(stateData['buttonText']);
+                $('#but_z').show();
             }
-            $('#but_z').show();
         }
         else {
-            console.log("           >>>>>| CHOICE COUNT UNDEFINED |<<<<<");
             let i = 1;
             for (; i <= stateData['current_cycle'][cycle]['choice_count'] ; i++) {
-                let buttonId = String.fromCharCode(64 + i).toLowerCase(); // Convert 1 to 'a', 2 to 'b', etc.
+                let buttonId = String.fromCharCode(64 + i).toLowerCase();
 
                 $('#but_' + buttonId).show();
                 if (stateData['current_cycle'][cycle]['buttonText']) {
-                    // console.log("---INSIDE UPDATE22");
                     $('#text_' + buttonId).text(stateData['current_cycle'][cycle]['buttonText'][String.fromCharCode(64 + i)]);
                 }
             }
-            // console.log("    --1-1-1 " +  String.fromCharCode(64 + i).toLowerCase());
-            // if(currentState === 'unconventional_state' || currentState === 'trad_state' || 'transitions'){
             if(currentState === 'unconventional_state' || currentState === 'trad_state'){
-
-                // console.log("  ----> " + String.fromCharCode(64 + i).toLowerCase());
                 $('#but_z').text(stateData['current_cycle'][cycle]['buttonText']['Z']).show();
 
             }
-
-            // if(stateData['current_cycle'][cycle]['choice_count'] < 1){
-            //     $('#but_z').show();
-            // }
         }
-        // console.log("  -> Button Update: " + current_state);                        // DEBUG EXTRA
-
-
     }
 
     $('.button').click(function() {
-        let buttonId = this.id.replace('but_', '').toUpperCase(); // Convert 'but_a' to 'A', for example
-        console.log("      |=================== Button (" + buttonId + ") Pressed ===================|");
-
+        let buttonId = this.id.replace('but_', '').toUpperCase();
         let nextState = undefined;
-        updateWorldTemp();
+        world_heat = positive_end - negative_end;
+        console.log("   Button Clicked:  " + buttonId);
 
-        if(buttonId === 'Z'){
-            console.log("      ZZZZ: " + current_state);
+        if(buttonId === 'Z' || buttonId === 'Y'){
             if(current_state === 'check_peace' || current_state === 'check_escalate'){
-                console.log("   BUTTON CLICK CYCLE: " + game_data['states'][current_state]['current_cycle'][cycle]);
-
-                console.log("           PEACE/ESCALATE");
                 nextState = game_data['states'][current_state]['current_cycle'][cycle]['calc_outcome'][escalatePeace];
             }
             else if(game_data['states'][current_state]['choice_count'] === undefined){
-                console.log(" -----DOES THIS WORK?");
                 nextState = game_data['states'][current_state]['current_cycle'][cycle]['trans']['Z'];
             }
             else if(current_state === 'cycle_increase'){
-                console.log(" -----DOES SHIT THIS WORK?");
                 nextState = game_data['states'][current_state]['trans'];
             }
-
             else{
-                console.log("           OTHER CHOICES");
                 nextState = game_data['states'][current_state]['trans']?.[buttonId] || current_state;
-                console.log("    --->>>> " + nextState);
             }
-            // nextState = game_data['states'][current_state]['current_cycle'][cycle]['trans']?.[buttonId] || current_state;
         }else{
-            console.log("      OTHER: " + current_state);
             nextState = game_data['states'][current_state]['current_cycle'][cycle]['trans']?.[buttonId] || current_state;
         }
-        console.log("    ====> " + nextState);
         updateState(nextState);
     });
-
-    function updateWorldTemp(){
-        console.log(" >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> UPDATING WORLD HEAT: ");
-        console.log("                                              Positive: " + positive_end);
-        console.log("                                              Negative: " + negative_end);
-
-        // world_heat = (negative_end + 1) / (positive_end + 1);
-        world_heat = positive_end - negative_end;
-
-        console.log("                                              World Heat: " + world_heat);
-
-    }
 </script>
 </html>
