@@ -3,12 +3,12 @@
 <head>
     <script src="https://code.jquery.com/jquery-3.7.1.js"
             integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
-    <title></title>
+    <title>World Crisis</title>
 </head>
 
 <style>
     body {
-        background-image: url("imgs/world_map.jpg");
+        background-image: url("imgs/world_map3.png");
         background-position: left top;
         background-repeat: no-repeat;
         background-size: cover, contain, auto
@@ -23,47 +23,57 @@
         text-align: center;
         text-decoration: none;
         outline: none;
-        color: #fff;
+        color: #fffeb4;
         border: none;
         border-radius: 15px;
-        box-shadow: 0 9px #e800ff;
+        box-shadow: 0 9px rgba(0, 45, 246, 0.32);
         margin: 8px 20px 8px 8px; /* 2nd is margin between button and text*/
     }
     .button:active {
         background-color: #3e8e41;
-        box-shadow: 0 5px #666;
+        box-shadow: 0 5px rgba(59, 161, 0, 0.27);
         transform: translateY(4px);
     }
     .verticalButtons {
         display: flex;
         flex-direction: column; /* Aligns the children (buttons) vertically */
         align-items: flex-start; /* Center-aligns the buttons horizontally */
-        width: max-content; /* Adjust the width of the container to fit the content */
+        width: max-content; /* TODO fix this back to max-content */
         margin-bottom: 5px;
     }
+    .button_text {
+        font-size: 24px;
+        font-family: Courier, monospace;
+        font-weight: bold;
+        color: #000d64;
+        /*margin-left: 10px;*/
+    }
+
 
     .button1 {
-        background-color: #04AA6D;
+        background-color: #578650;
     }
-    .button1:hover {background-color: #3e8e41}
+    .button1:hover {background-color: #487A7B
+    }
 
     .button2 {
-        background-color: #e50b67;
+        background-color: #d7b11d;
     }
-    .button2:hover {background-color: #9b0a41}
+    .button2:hover {background-color: #9a5940
+    }
 
     .button3 {
-        background-color: #0b50e5;
+        background-color: #659683;
     }
-    .button3:hover {background-color: #1a26a2
+    .button3:hover {background-color: #39564b
     }
 
     .button0 {
-        background-color: rgb(253, 0, 0);
-        box-shadow: 0 9px #00a6ff;
+        background-color: #2b9872;
+        box-shadow: 0 9px #0b3d0a;
     }
     .button0:hover {
-        background-color: #790505;
+        background-color: #2E86AB;
     }
 
     .boxy {
@@ -79,16 +89,28 @@
         box-sizing: border-box;
     }
     promptText{
-        font-size:20px;
+        font-size:30px;
         white-space: normal;
-        font-family: "Lucida Console", "Courier New", monospace;
-    }
+        font-family: "Palatino Linotype",sans-serif;
+        font-weight: bold;
 
+    }
+    /*gameText{*/
+    /*    font-size:80px;*/
+    /*    white-space: normal;*/
+    /*    font-family: "Lucida Console", "Courier New", sans-serif;*/
+    /*    font-weight: bold;*/
+    /*}*/
     .button_container {
         display: flex;
         align-items: center;
+        justify-content: space-between;
     }
-
+    .button_and_gauge {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+    }
 </style>
 
 <div id="start_game" style="display:none">
@@ -109,27 +131,33 @@
     <promptText id="game_img"></promptText>
     <promptText id="get_buttons"></promptText>
 
-    <div class="boxy">
-        <promptText id="game_prompt"></promptText>
-        <div class="verticalButtons">
-            <div class="button_container">
-                <button class="button button1" id="but_a">A</button>
-                <span class="button_text" id="text_a"></span>
-            </div>
-            <div class="button_container">
-                <button class="button button2" id="but_b">B</button>
-                <span class="button_text" id="text_b"></span>
-            </div>
-            <div class="button_container">
-                <button class="button button3" id="but_c">C</button>
-                <span class="button_text" id="text_c"></span>
-            </div>
-            <div class="button_container">
-                <button class="button button4" id="but_d">D</button>
-                <span class="button_text" id="text_d"></span>
+
+    <div class="button_and_gauge">
+        <div class="boxy">
+            <promptText id="game_prompt"></promptText>
+
+            <div class="verticalButtons">
+                <div class="button_container">
+                    <button class="button button1" id="but_a">A</button>
+                    <span class="button_text" id="text_a"></span>
+                </div>
+                <div class="button_container">
+                    <button class="button button2" id="but_b">B</button>
+                    <span class="button_text" id="text_b"></span>
+                </div>
+                <div class="button_container">
+                    <button class="button button3" id="but_c">C</button>
+                    <span class="button_text" id="text_c"></span>
+                </div>
+                <div class="button_container">
+                    <button class="button button4" id="but_d">D</button>
+                    <span class="button_text" id="text_d"></span>
+                </div>
             </div>
         </div>
+        <div id="tempGauge" style="width: 300px; height: 150px;"></div>
     </div>
+
 
     <div class="boxy">
         <promptText id="choice_outcome"></promptText>
@@ -158,7 +186,6 @@
 </div>
 
 <!--   World Temperature Gauge  -->
-<div id="tempGauge" style="width: 300px; height: 150px;"></div>
 <!--<a href="#" id="tempGauge_refresh" class="button grey">Random Refresh</a>-->
 <script src="../raphael.min.js"></script>
 <script src="../justgage.js"></script>
@@ -175,6 +202,7 @@
         label: "World Temperature",
         gaugeWidthScale: 1,
         pointer: true,
+        hideMinMax: true,
         textRenderer: function (val) {
             if (val > 0) {
                 return 'Peaceful';
@@ -194,7 +222,7 @@
         //     return false;
         // });
     // });
-    // $('#tempGauge').hide();
+    $('#tempGauge').hide();
 
 
 
@@ -255,6 +283,8 @@
 
         // Update State Function
     function updateState(state) {
+
+
         current_state = state;
         if(current_state === 'start_game'){
             world_heat = 0;
@@ -280,7 +310,7 @@
 
         // Button Color
         $('#but_z').css({
-            'background-color': 'red',
+            'background-color': '#367000',
             'display': 'inline-block'
         });
         if (stateData['buttonColor'] !== undefined) {
@@ -305,12 +335,12 @@
         updateButtons(stateData, current_state);
 
         // console.log("CurrentCondition: " + game_data['states'][state]['condition'])    // DEBUG EXTRA
+        $('#tempGauge').hide();
 
 
         let conditionMet = null;
         let nextState = null;
         // let posNextState = null;
-
         // stateDate = game_data['states'][state]
         if(current_state === 'check_peace') {
             // console.log("    * * * Checking Peace");    // DEBUG_STATES
@@ -446,6 +476,8 @@
                 }
 
 
+            }else if(current_state === 'end_choice'){
+                $('#tempGauge').show();
             }
             else if (typeof game_data['states'][state]['condition'] !== 'undefined' && game_data['states'][state]['condition'] != null) {
                 console.log("   2]-----| CONDITION EXISTS |-----");
@@ -463,10 +495,12 @@
                 // console.log("        Fail: " + stateData.fail['sub_text']);                                                           // DEBUG EXTRA
                 let message = stateData['current_cycle'][cycle]['text'];
 
-                $('#tempGauge').show();
+                // $('#tempGauge').show();
                 $('#game_text').parent('.boxy').show();
                 $('#game_text').html(message || '');
                 $('.verticalButtons').show();
+                $('#tempGauge').show();
+
             }
             else if(current_state === "cycle_increase"){
                 let message = stateData['current_cycle'][cycle]['transition_message'];
@@ -598,7 +632,7 @@
                 nextState = game_data['states'][current_state]['current_cycle'][cycle]['trans']['Z'];
             }
             else if(current_state === 'cycle_increase'){
-                console.log(" -----DOES GAY SHIT THIS WORK?");
+                console.log(" -----DOES SHIT THIS WORK?");
                 nextState = game_data['states'][current_state]['trans'];
             }
 

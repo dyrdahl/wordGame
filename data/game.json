@@ -6,7 +6,7 @@
       "choice_count": -1,
       "buttonText" : "Start Game",
       "imagePath" : "imgs/start_US.jpg",
-      "buttonColor": "green",
+      "buttonColor": "#178516",
       "trans": {
         "Z": "briefing"
       }
@@ -15,7 +15,7 @@
       "text" : "Precursor:",
       "choice_count": -1,
       "buttonText" : "Next",
-      "buttonColor": "green",
+      "buttonColor": "#178516",
       "trans": {
         "Z": "enemy_action"
       }
@@ -25,7 +25,7 @@
       "choice_count": -1,
       "buttonText" : "Next",
       "imagePath" : "",
-      "buttonColor": "green",
+      "buttonColor": "#178516",
       "trans": {
         "Z": "choice"
       }
@@ -197,7 +197,7 @@
       "choice_count": -1,
       "trans": "choice",
       "buttonText" : "Next",
-      "buttonColor": "green",
+      "buttonColor": "#178516",
       "current_cycle": {
         "1": {
           "transition_message": "Don't poke the bear!"
@@ -266,6 +266,7 @@
     },
     "trad_state": {
       "text": "Traditional approach. Choose:",
+      "buttonColor": "#9a0000",
       "current_cycle": {
         "1": {
           "choice_count": 3,
@@ -530,6 +531,7 @@
 
     "unconventional_state": {
       "text": "Unconventional warfare. Choose:",
+      "buttonColor": "#9a0000",
       "current_cycle" : {
         "1": {
           "choice_count": 3,
@@ -826,7 +828,7 @@
       "choice_count": -1,
       "text": "Peace Achieved",
       "buttonText" : "Start Over & Try Again",
-      "buttonColor" : "teal",
+      "buttonColor" : "#FFB500B",
       "imagePath" : "imgs/victory.gif",
       "trans": {
         "Z": "start_game"
@@ -834,7 +836,7 @@
     },
     "losing_screen": {
       "buttonText" : "Start Over & Try Again",
-      "buttonColor" : "orange",
+      "buttonColor" : "#FFB500B",
       "choice_count": -1,
       "text": "Game Over",
       "trans": {
