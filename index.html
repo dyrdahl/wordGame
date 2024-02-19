@@ -327,11 +327,11 @@
             // Check if 'condition' exists in stateData before trying to access it
             if(current_state === 'start_game'){
                 console.log("   2]-----| START_SCREEN |-----");
-                positive_end = 10;
-                negative_end = 4;
+                positive_end = 0;
+                negative_end = 0;
                 stim = 0;
                 dope = 0;
-                cycle = 1;  // TODO Set to correct starting cycle = 0
+                cycle = 1;
 
                 $('#game_prompt').parent('.boxy').hide();
                 $('#game_text').html(stateData.text || '');

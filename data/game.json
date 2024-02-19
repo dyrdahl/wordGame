@@ -87,8 +87,8 @@
           "text": "Tensions in the world are rising. What type of response would you like?",
           "choice_count": 2,
           "buttonText": {
-            "A": "Passive",
-            "B": "Aggressive"
+            "A": "Combative",
+            "B": "Passive"
           },
           "trans": {
             "A": "trad_state",
@@ -140,7 +140,7 @@
       "condition": "positive_end > 25",
       "current_cycle" : {
         "1": {
-          "condition_value" : 20,
+          "condition_value" : 5,
           "calc_outcome": {
             "1": "winning_screen",
             "2": "cycle_increase",
@@ -166,7 +166,7 @@
           }
         },
         "3": {
-          "condition_value" : 20,
+          "condition_value" : 30,
           "calc_outcome": {
             "1": "winning_screen",
             "2": "cycle_increase",
@@ -179,7 +179,7 @@
           }
         },
         "4" : {
-          "condition_value" : 5,
+          "condition_value" : 40,
           "calc_outcome": {
             "1": "winning_screen",
             "2": "losing_screen",
@@ -220,7 +220,7 @@
       "condition": "negative_end > 25",
       "current_cycle": {
         "1": {
-          "condition_value": 2,
+          "condition_value": 8,
           "calc_outcome": {
             "1": "choice",
             "2": "cycle_increase"
@@ -230,7 +230,7 @@
             "2" : "Tensions are building!"
           }},
         "2": {
-          "condition_value": 2,
+          "condition_value": 15,
           "calc_outcome": {
             "1": "choice",
             "2": "cycle_increase"
@@ -241,7 +241,7 @@
           }
         },
         "3": {
-          "condition_value": 2,
+          "condition_value": 25,
           "calc_outcome": {
             "1": "choice",
             "2": "cycle_increase"
@@ -252,7 +252,7 @@
           }
         },
         "4": {
-          "condition_value": 5,
+          "condition_value": 35,
           "calc_outcome": {
             "1": "choice",
             "2": "losing_screen"
@@ -330,16 +330,16 @@
     "spy_choice": {
       "choice_count" : -1,
       "buttonText": "Continue",
-      "probability" : 0.5,
+      "probability" : 0.4,
       "success" : {
         "sub_text": "Your spies were a success.",
-        "dope" : 3,
-        "end" : 4
+        "dope" : 2,
+        "end" : 2
       },
       "fail": {
         "sub_text": "Your spies were a failure.",
-        "stim" : 2,
-        "end" : 4
+        "stim" : 1,
+        "end" : 1
       },
       "trans": {
         "Z": "end_choice"
@@ -369,13 +369,13 @@
       "probability" : 0.8,
       "success" : {
         "sub_text": "Deploying the carriers was a success",
-        "dope" : 3,
-        "end" : 4
+        "dope" : 1,
+        "end" : 2
       },
       "fail": {
         "sub_text": "Deploying the carriers was a failure and just pissed Russia off more",
         "stim" : 2,
-        "end" : 4
+        "end" : 3
       },
       "trans": {
         "Z": "end_choice"
@@ -385,16 +385,16 @@
     "weaponsSimple_choice": {
       "choice_count" : -1,
       "buttonText": "Continue",
-      "probability" : 0.8,
+      "probability" : 0.5,
       "success" : {
         "sub_text": "Providing weapons to Russia's target was a success.",
-        "dope" : 3,
-        "end" : 4
+        "dope" : 2,
+        "end" : 2
       },
       "fail": {
         "sub_text": "Providing weapons to Russia's target was a failure!",
         "stim" : 2,
-        "end" : 4
+        "end" : 2
       },
       "trans": {
         "Z": "end_choice"
@@ -403,16 +403,16 @@
     "milTrain_choice": {
       "choice_count" : -1,
       "buttonText": "Continue",
-      "probability" : 0.8,
+      "probability" : 0.5,
       "success" : {
         "sub_text": "Training the military of Russia's target was a success.",
-        "dope" : 3,
-        "end" : 4
+        "dope" : 2,
+        "end" : 2
       },
       "fail": {
         "sub_text": "Training the military of Russia's target was a failure!",
         "stim" : 2,
-        "end" : 4
+        "end" : 2
       },
       "trans": {
         "Z": "end_choice"
@@ -421,16 +421,16 @@
     "sabotageKinetic_choice": {
       "choice_count" : -1,
       "buttonText": "Continue",
-      "probability" : 0.8,
+      "probability" : 0.3,
       "success" : {
         "sub_text": "Sabotaging [kinetic] Russia was a success.",
         "dope" : 3,
-        "end" : 4
+        "end" : 3
       },
       "fail": {
         "sub_text": "Sabotaging [kinetic] Russia was a failure!",
-        "stim" : 2,
-        "end" : 4
+        "stim" : 3,
+        "end" : 3
       },
       "trans": {
         "Z": "end_choice"
@@ -439,16 +439,16 @@
     "weaponsAdv_choice": {
       "choice_count" : -1,
       "buttonText": "Continue",
-      "probability" : 0.34,
+      "probability" : 0.42,
       "success" : {
         "sub_text": "Your advanced weapons turned the tide and were a success",
         "dope" : 3,
-        "end" : 4
+        "end" : 2
       },
       "fail": {
         "sub_text": "Your advanced weapons failed to help and were a failure",
         "stim" : 2,
-        "end" : 4
+        "end" : 2
       },
       "trans": {
         "Z": "end_choice"
@@ -460,13 +460,13 @@
       "probability" : 0.5,
       "success" : {
         "sub_text": "Your SF raids were a success",
-        "dope" : 3,
-        "end" : 4
+        "dope" : 2,
+        "end" : 2
       },
       "fail": {
         "sub_text": "Your SF raids were a failure",
         "stim" : 2,
-        "end" : 4
+        "end" : 5
       },
       "trans": {
         "Z": "end_choice"
@@ -475,30 +475,29 @@
     "mercenary_choice": {
       "choice_count" : -1,
       "buttonText": "Continue",
-      "probability" : 0.5,
+      "probability" : 0.3,
       "success" : {
         "sub_text": "Your mercenaries were a success",
         "dope" : 3,
-        "end" : 4
+        "end" : 3
       },
       "fail": {
         "sub_text": "Your mercenaries were a failure",
-        "stim" : 2,
-        "end" : 4
+        "stim" : 3,
+        "end" : 3
       },
       "trans": {
         "Z": "end_choice"
       }
     },
 
-
-
     "invade_choice": {
       "choice_count" : -1,
       "buttonText": "Continue",
+      "probability" : 0.2,
       "success" : {
         "sub_text": "Your invasion was a success",
-        "dope" : 4,
+        "dope" : 3,
         "end" : 4
       },
       "fail": {
@@ -513,16 +512,16 @@
     "airWar_choice": {
       "choice_count" : -1,
       "buttonText": "Continue",
-      "probability" : 0.6,
+      "probability" : 0.5,
       "success" : {
         "sub_text": "Your [air war] was a success",
-        "dope" : 4,
-        "end" : 4
+        "dope" : 3,
+        "end" : 3
       },
       "fail": {
         "sub_text": "Your [air war] was a failure",
         "stim" : 3,
-        "end" : 4
+        "end" : 5
       },
       "trans": {
         "Z": "end_choice"
@@ -600,13 +599,13 @@
       "probability" : 0.5,
       "success" : {
         "sub_text": "Your advanced weaponry has Russia trembling in fear!",
-        "dope" : 3,
-        "end" : 4
+        "dope" : 1,
+        "end" : 1
       },
       "fail": {
         "sub_text": "Your advanced weaponry failed to scare Russia.",
         "stim" : 2,
-        "end" : 4
+        "end" : 3
       },
       "trans": {
         "Z": "end_choice"
@@ -615,16 +614,16 @@
     "propaganda_choice": {
       "choice_count" : -1,
       "buttonText": "Continue",
-      "probability" : 0.5,
+      "probability" : 0.3,
       "success" : {
         "sub_text": "Your propaganda was a success",
-        "dope" : 3,
-        "end" : 4
+        "dope" : 2,
+        "end" : 2
       },
       "fail": {
         "sub_text": "Your propaganda was a failure and just pissed Russia off more",
         "stim" : 2,
-        "end" : 4
+        "end" : 2
       },
       "trans": {
         "Z": "end_choice"
@@ -636,13 +635,13 @@
       "probability" : 0.5,
       "success" : {
         "sub_text": "Your harsh warning was a success",
-        "dope" : 3,
-        "end" : 4
+        "dope" : 1,
+        "end" : 1
       },
       "fail": {
         "sub_text": "Your harsh warning was a failure and just pissed Russia off more",
-        "stim" : 2,
-        "end" : 4
+        "stim" : 1,
+        "end" : 1
       },
       "trans": {
         "Z": "end_choice"
@@ -652,16 +651,16 @@
     "sanctions_choice": {
       "choice_count" : -1,
       "buttonText": "Continue",
-      "probability" : 0.24,
+      "probability" : 0.5,
       "success" : {
         "sub_text": "Imposing sanctions on Russia's assets was a total success",
-        "dope" : 4,
-        "end" : 4
+        "dope" : 2,
+        "end" : 2
       },
       "fail": {
         "sub_text": "Imposing sanctions on Russia's assets was a complete failure",
-        "stim" : 3,
-        "end" : 4
+        "stim" : 2,
+        "end" : 2
       },
       "trans": {
         "Z": "end_choice"
@@ -670,16 +669,16 @@
     "blockade_choice": {
       "choice_count" : -1,
       "buttonText": "Continue",
-      "probability" : 0.24,
+      "probability" : 0.4,
       "success" : {
         "sub_text": "Blockading Russia's shoreline and overseas assets was a total success",
-        "dope" : 4,
-        "end" : 4
+        "dope" : 2,
+        "end" : 2
       },
       "fail": {
         "sub_text": "Blockading Russia's shoreline and overseas assets was a complete failure",
-        "stim" : 3,
-        "end" : 4
+        "stim" : 2,
+        "end" : 3
       },
       "trans": {
         "Z": "end_choice"
@@ -688,16 +687,16 @@
     "sabotageCyber_choice": {
       "choice_count" : -1,
       "buttonText": "Continue",
-      "probability" : 0.24,
+      "probability" : 0.6,
       "success" : {
         "sub_text": "Using electronic warfare to hack Russia's military was a total success",
-        "dope" : 4,
-        "end" : 4
+        "dope" : 2,
+        "end" : 3
       },
       "fail": {
         "sub_text": "Using electronic warfare to hack Russia's military was a complete failure",
-        "stim" : 3,
-        "end" : 4
+        "stim" : 2,
+        "end" : 3
       },
       "trans": {
         "Z": "end_choice"
@@ -706,16 +705,16 @@
     "destableCIA_choice": {
       "choice_count" : -1,
       "buttonText": "Continue",
-      "probability" : 0.24,
+      "probability" : 0.4,
       "success" : {
         "sub_text": "Using the CIA to destabilize was a total success",
-        "dope" : 4,
-        "end" : 4
+        "dope" : 3,
+        "end" : 2
       },
       "fail": {
         "sub_text": "Using the CIA to destabilize was a complete failure",
-        "stim" : 3,
-        "end" : 4
+        "stim" : 2,
+        "end" : 2
       },
       "trans": {
         "Z": "end_choice"
@@ -727,8 +726,8 @@
       "probability" : 0.3,
       "success" : {
         "sub_text": "False flag was a total success",
-        "dope" : 4,
-        "end" : 4
+        "dope" : 3,
+        "end" : 3
       },
       "fail": {
         "sub_text": "False flag was a complete failure",
@@ -745,13 +744,13 @@
       "probability" : 0.4,
       "success" : {
         "sub_text": "Sabotaging infrastructure was a total success",
-        "dope" : 4,
-        "end" : 4
+        "dope" : 3,
+        "end" : 3
       },
       "fail": {
         "sub_text": "Sabotaging infrastructure was a complete failure",
         "stim" : 3,
-        "end" : 4
+        "end" : 3
       },
       "trans": {
         "Z": "end_choice"
@@ -761,16 +760,16 @@
     "tacNukes_choice": {
       "choice_count" : -1,
       "buttonText": "Continue",
-      "probability" : 0.25,
+      "probability" : 0.2,
       "success" : {
         "sub_text": "Your tactical nukes were a success",
         "dope" : 4,
-        "end" : 4
+        "end" : 5
       },
       "fail": {
         "sub_text": "Your tactical nukes were a failure",
-        "stim" : 3,
-        "end" : 4
+        "stim" : 4,
+        "end" : 6
       },
       "trans": {
         "Z": "end_choice"
@@ -779,16 +778,16 @@
     "bio_choice": {
       "choice_count" : -1,
       "buttonText": "Continue",
-      "probability" : 0.1,
+      "probability" : 0.15,
       "success" : {
         "sub_text": "You are a monster! But the biological strike was a success",
         "dope" : 4,
-        "end" : 4
+        "end" : 5
       },
       "fail": {
         "sub_text": "You are a monster! Your biological strike was a failure",
-        "stim" : 3,
-        "end" : 4
+        "stim" : 5,
+        "end" : 6
       },
       "trans": {
         "Z": "end_choice"
@@ -797,17 +796,17 @@
     "chemical_choice": {
       "choice_count" : -1,
       "buttonText": "Continue",
-      "probability" : 0.15,
+      "probability" : 0.25,
       "imagePath" : "imgs/child_gas.jpg",
       "success" : {
         "sub_text": "Your chemical strike was a success",
         "dope" : 4,
-        "end" : 4
+        "end" : 5
       },
       "fail": {
         "sub_text": "Your chemical strike was a failure",
-        "stim" : 3,
-        "end" : 4
+        "stim" : 5,
+        "end" : 5
       },
       "trans": {
         "Z": "end_choice"
