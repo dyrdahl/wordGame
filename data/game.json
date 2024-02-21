@@ -836,6 +836,7 @@
       "buttonText" : "Start Over & Try Again",
       "buttonColor" : "#FFB500B",
       "choice_count": -1,
+      "imagePath" : "imgs/nuclearFail.jpg",
       "text": "Game Over",
       "trans": {
         "Z": "start_game"
